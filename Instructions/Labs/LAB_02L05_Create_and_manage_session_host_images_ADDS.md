@@ -220,7 +220,7 @@ Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Deskt
 1. **az140-25-vm0** へのリモート デスクトップ セッション内の、 **[管理者: C:\windows\system32\cmd.exe]** ウィンドウで、コマンド プロンプトから、イメージを生成するためのオペレーティング システムを準備し、自動的にシャットダウンするために、sysprep ユーティリティを実行します。
 
    ```cmd
-   C:\Windows\System32\Sysprep\sysprep.exe /oobe /generalize /shutdown
+   C:\Windows\System32\Sysprep\sysprep.exe /oobe /generalize /shutdown /mode:vm
    ```
 
    > **注**:sysprep プロセスが完了するまで待ちます。 これには 2 分ほどかかる場合があります。 これにより、オペレーティング システムが自動的にシャットダウンされます。 
