@@ -95,9 +95,7 @@ Azure Active Directory ドメインサービス (Azure AD DS) 環境でホスト
    |名前のプレフィックス|**az140-21-p1**|
    |仮想マシンの場所|このラボの最初の演習でリソースをデプロイした Azure リージョンの名前|
    |可用性のオプション|**インフラストラクチャの冗長性は必要ありません**|
-   |セキュリティの種類|**Standard**
-   |イメージの種類|**[ギャラリー]**|
-   |Image|**Windows 10 Enterprise マルチセッション、バージョン 2004 + Microsoft 365 Apps**|
+   |Image|**Windows 11 Enterprise マルチセッション + Microsoft 365 Apps、バージョン 22H2**|
    |仮想マシンのサイズ|**Standard D2s v3**|
    |[Number of VMs](VM の数)|**2**|
    |OS ディスクの種類|**Standard SSD**|
