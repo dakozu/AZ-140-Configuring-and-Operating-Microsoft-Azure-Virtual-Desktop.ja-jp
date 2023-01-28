@@ -60,7 +60,7 @@ Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Deskt
 1. ラボのコンピューターから Web ブラウザーを起動し、[Azure portal](https://portal.azure.com) に移動し、このラボで使用するサブスクリプションの所有者の役割を持つユーザーアカウントの認証情報を提供してサインインします。
 1. Azure portal で、「**仮想マシン**」を検索して選択し、 **[Virtual Machines]** ブレードで、 **[az140-vm11]** を選択します。
 1. **[az140-dc-vm11]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[Bastion]** を選択し、 **[az140-dc-vm11 \| 接続]** ウィンドウの **[Bastion]** タブで **[Bastion を使用する]** を選択します。
-1. プロンプトが表示されたら、次の資格情報を入力し、 **[接続]** を選択します。
+1. プロンプトが表示されたら、次の資格情報を入力し、**[接続]** を選択します。
 
    |設定|値|
    |---|---|
@@ -110,7 +110,15 @@ Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Deskt
    New-AzOperationalInsightsWorkspace -Location $location -Name $workspaceName -ResourceGroupName $resourceGroupName
    ```
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** で、上部のメニューから [ファイル] を選択し、**C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzAutoAccount.ps1** スクリプトを開いて、**82** 行目と **86** 行目の間のコードを、次のように複数行のコメントで囲んで保存します。
+1. **az140-dc-vm11** へのリモート デスクトップ セッション内の、 **[管理者: Windows PowerShell ISE]** で、上部のメニューから [ファイル] を選択し、**C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzAutoAccount.ps1** スクリプトを開いて、**97**、**98**、**99** 行目に単一行コメント文字を、次のように追加します。
+
+   ```powershell
+   #    'Az.Compute'
+   #    'Az.Resources'
+   #    'Az.Automation'
+   ```
+
+1. **C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzAutoAccount.ps1** スクリプトで、**82** 行目と **86** 行目の間のコードを次のように複数行のコメントで囲み、変更をファイルに保存します。
 
    ```powershell
    <#
@@ -121,7 +129,7 @@ Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Deskt
    }
    #>
    ```
-
+   
 1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで新しいタブを開き、次のスクリプトを貼り付けて実行し、自動スケール ソリューションの一部である Azure Automation アカウントを作成します。
 
    ```powershell
@@ -151,7 +159,20 @@ Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Deskt
 1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示している Microsoft Edge ウィンドウで、**Automationアカウント**を検索して選択し、**Automationアカウント** ブレードで、新しくプロビジョニングされたAzure Automation アカウント (名前は **az140-automation-51** プレフィックスで始まる) を表すエントリを選択します。
 1. [Automation Account] ブレードの左側の垂直メニューの **[Process Automation]** セクションで、 **[Runbooks]** を選択し、Runbook のリストで **WVDAutoScaleRunbookARMBased** Runbook の存在を確認します。
 1. [Automation Account] ブレードの左側の垂直メニューの **[アカウント設定]** セクションで、 **[アカウントとして実行]** を選択し、右側のアカウントのリストで、 **[+ Azure 実行アカウント]** の横にある **[作成]** をクリックします。
-1. **[Azure 実行アカウントの追加]** ブレードで、 **[作成]** をクリックし、新しいアカウントが正常に作成されたことを確認します。
+1. **[Azure 実行アカウントの追加]** ブレードで、 **[作成]** をクリックし、新しいアカウントが正常に作成されたことを確認します。 
+<!--
+1. On the Automation Account blade, in the vertical menu on the left side, in the **Account Settings** section, select **Identity**.
+1. On the **System assigned** tab of the Identity blade of the automation account, set the **Status** to **On**, select **Save**, and, when prompted to  confirm, select **Yes**.
+1. On the **System assigned** tab of the Identity blade of the automation account, select **Azure role assignments**.
+1. On the **Azure role assignments** blade, select **+ Add role assignment (Preview)**.
+1. On the **Add role assignment (Preview)** blade, specify the following information and select **Save**.
+
+   |Setting|Value|
+   |---|---|
+   |Scope|**Subscription**|
+   |Subscription|the name of the Azure subscription where you provisioned the host pool resources|
+   |Role|**Contributor**|
+-->   
 
 #### <a name="task-3-create-an-azure-logic-app"></a>タスク 3:Azure Logic App を作成する
 
@@ -164,7 +185,7 @@ Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Deskt
    Invoke-WebRequest -Uri $uri -OutFile ".\CreateOrUpdateAzLogicApp.ps1"
    ```
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** で、上部のメニューから **[ファイル]** を選択し、**C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzLogicApp.ps1** スクリプトを開いて、**134** 行目と **138** 行目の間のコードを、次のように複数行のコメントで囲んで保存します。
+1. **az140-dc-vm11** へのリモート デスクトップ セッション内の、 **[管理者: Windows PowerShell ISE]** で、上部のメニューから **[ファイル]** を選択し、**C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzLogicApp.ps1** スクリプトを開いて、**134** 行目と **138** 行目の間のコードを次のように複数行のコメントで囲んで、変更を保存します。
 
    ```powershell
    <#

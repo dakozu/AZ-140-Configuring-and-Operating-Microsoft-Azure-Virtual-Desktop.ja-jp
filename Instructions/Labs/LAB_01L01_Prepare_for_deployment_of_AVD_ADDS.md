@@ -426,7 +426,7 @@ Active Directory ドメイン サービス (AD DS) 環境でのデプロイの�
 1. az140-dc-vm11 へのリモート デスクトップ セッション内で、Internet Explorer を起動し、[Microsoft Edge for Business のダウンロードページ](https://www.microsoft.com/en-us/edge/business/download)に移動します。
 1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Microsoft Edge を使用し、[Azure portal](https://portal.azure.com) に移動します。 プロンプトが表示されたら、このラボで使用しているサブスクリプションで所有者の役割を持つユーザーアカウントの資格情報を使用してサインインします。
 1. Azure portal で、Azure portal ページの上部にある **[リソース、サービス、ドキュメントの検索]** テキスト ボックスを使用して、**Azure Active Directory** ブレードを検索して移動し、Azure AD テナント ブレードのハブ メニューの **[管理]** セクションで、 **[Azure AD Connect]** を選択します。
-1. **[Azure AD Connect]** ブレードで、 **[Azure AD Connect のダウンロード]** リンクを選択します。 これにより、**Microsoft Azure Active Directory Connect** のダウンロード ページを表示する新しいブラウザー タブが自動的に開きます。
+1. **[Azure AD Connect]** ブレードで、最初に **[同期の接続]** リンクを選択し、 **[Azure AD Connect のダウンロード]** リンクを選択します。 これにより、**Microsoft Azure Active Directory Connect** のダウンロード ページを表示する新しいブラウザー タブが自動的に開きます。
 1. **[Microsoft Azure Active Directory Connect]** のダウンロード ページで、 **[ダウンロード]** を選択します。
 1. **AzureADConnect.msi** インストーラーを実行するか保存するかを確認するメッセージが表示されたら、 **[実行]** を選びます。 そうでない場合は、ダウンロードした後でファイルを開き、**Microsoft Azure Active Directory Connect** ウィザードを開始します。
 1. **Microsoft Azure Active Directory Connect** ウィザードの **[Azure AD Connect へようこそ]** ページで、チェック ボックス **[ライセンス条項とプライバシーに関する通知に同意します]** をオンにして、 **[続行]** を選びます。
@@ -460,6 +460,6 @@ Active Directory ドメイン サービス (AD DS) 環境でのデプロイの�
 
 1. **[構成が完了しました]** ページの情報を確認し、 **[終了]** を選択して、**Microsoft Azure Active Directory Connect** ウィンドウを閉じます。
 1. **az140-dc-vm11** へのリモート デスクトップ セッションの、Azure portal を表示している Microsoft Edge ウィンドウで、Adatum Lab Azure AD テナントの **[ユーザー - すべてのユーザー]** ブレードに移動します。
-1. **[ユーザー] \| [すべてのユーザー]** ブレードで、ユーザー オブジェクトのリストに、このラボで前に作成した AD DS ユーザー アカウントのリストが含まれており、 **[ディレクトリの同期]** 列に **[はい]** エントリが表示されていることに注意してください。
+1. **[ユーザー] \| [すべてのユーザー]** ブレードで、ユーザー オブジェクトのリストに、このラボで前に作成した AD DS ユーザー アカウントのリストが含まれており、 **[オンプレミスの同期が有効]** 列に **[はい]** エントリが表示されていることに注目します。
 
    > **注**:AD DS ユーザー アカウントが表示されるまで、数分待ってからブラウザー ページを更新する必要がある場合があります。
