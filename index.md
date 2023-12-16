@@ -1,19 +1,14 @@
 ---
-title: オンライン ホステッド インストラクション
+title: オンラインでホスティングされている手順
 permalink: index.html
 layout: home
-ms.openlocfilehash: 43166964d12182982da0b164ba5014eae6bc59b2
-ms.sourcegitcommit: e20f28b25e79c58542ac1fd5d29fe7acef4bba86
-ms.translationtype: HT
-ms.contentlocale: ja-JP
-ms.lasthandoff: 07/06/2022
-ms.locfileid: "146977020"
 ---
-# <a name="content-directory"></a>コンテンツ ディレクトリ
+
+# コンテンツ ディレクトリ
 
 各ラボの演習とデモへのハイパーリンクを以下に示します。
 
-## <a name="labs"></a>ラボ
+## ラボ
 
 {% assign labs = site.pages | where_exp:"page", "page.url contains '/Instructions/Labs'" %}
 | モジュール | ラボ |

@@ -1,359 +1,276 @@
 ---
 lab:
-  title: 'ラボ:ホスト プール (AD DS) での自動スケーリングの実装'
-  module: 'Module 5: Monitor and Maintain a WVD Infrastructure'
+  title: 'ラボ: ホスト プールに自動スケーリングを実装する (AD DS)'
+  module: 'Module 5: Monitor and Maintain an AVD Infrastructure'
 ---
 
-# <a name="lab---implement-autoscaling-in-host-pools-ad-ds"></a>ラボ - ホスト プールに自動スケールを実装する (AD DS)
-# <a name="student-lab-manual"></a>受講生用ラボ マニュアル
+# ラボ - ホスト プールに自動スケールを実装する (AD DS)
+# 受講生用ラボ マニュアル
 
-## <a name="lab-dependencies"></a>ラボの依存関係
+## ラボの依存関係
 
 - このラボで使用する Azure サブスクリプション。
-- このラボで使用する Azure サブスクリプション内で所有者または共同作成者のロールを持つ Microsoft アカウントまたは Azure AD アカウント、この Azure サブスクリプションに関連付けられた Azure AD テナント内でグローバル管理者ロールを持つMicrosoft アカウントまたは Azure AD アカウント。
-- 実施するラボ - **Azure Virtual Desktop (AD DS) のデプロイを準備する**
-- 実施するラボ - **Azure portal (AD DS) を使用してホスト プールとセッション ホストをデプロイする**
+- このラボで使用する Azure サブスクリプションの所有者または共同作成者ロールを持つ Microsoft アカウントまたは Microsoft Entra アカウントと、Azure サブスクリプションに関連付けられた Microsoft Entra テナントのグローバル管理者ロールを持つ Microsoft アカウントまたは Microsoft Entra アカウント。
+- 完了したラボ: **Azure Virtual Desktop (AD DS) のデプロイを準備する**
+- 完了したラボ **Azure portal を使用してホスト プールとセッション ホストをデプロイする (AD DS)**
 
-## <a name="estimated-time"></a>推定所要時間
+## 推定所要時間
 
-約 60 分
+60 分
 
-## <a name="lab-scenario"></a>ラボのシナリオ
+## ラボのシナリオ
 
-Active Directory ドメイン サービス (AD DS) 環境で Azure Virtual Desktop セッション ホストの自動スケーリングを構成する必要があります。
+Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop セッション ホストの自動スケーリングを構成する必要があります。
 
-## <a name="objectives"></a>目標
+## 目標
   
 このラボを完了すると、次のことができるようになります。
 
-- Azure Virtual Desktop セッションホストの自動スケールを構成する
-- Azure Virtual Desktop セッションホストの自動スケールを確認する
+- Azure Virtual Desktop セッション ホストの自動スケーリングを構成する
+- Azure Virtual Desktop セッション ホストの自動スケーリングを検証する
 
-## <a name="lab-files"></a>ラボ ファイル 
+## ラボ ファイル
 
 - なし
 
-## <a name="instructions"></a>手順
+## 手順
 
-### <a name="exercise-1-configure-autoscaling-of-azure-virtual-desktop-session-hosts"></a>演習 1:Azure Virtual Desktop セッションホストの自動スケールを構成する
+### 演習 1: Azure Virtual Desktop セッション ホストの自動スケーリングを構成する
 
 この演習の主なタスクは次のとおりです。
 
-1. Azure Virtual Desktop セッション ホストの自動スケールを準備する
-1. Azure Automation アカウントを作成して構成する
-1. Azure Logic App を作成する
+1. Azure Virtual Desktop セッション ホストのスケーリングの準備をする
+2. Azure Virtual Desktop セッション ホストのスケーリング プランを作成する
 
-#### <a name="task-1-prepare-for-autoscaling-of-azure-virtual-desktop-session-hosts"></a>タスク 1:Azure Virtual Desktop セッション ホストの自動スケールを準備する
+#### タスク 1: Azure Virtual Desktop セッション ホストのスケーリングの準備をする
 
-1. ラボのコンピューターから Web ブラウザーを起動し、[Azure portal](https://portal.azure.com) に移動し、このラボで使用するサブスクリプションの所有者の役割を持つユーザーアカウントの認証情報を提供してサインインします。
-1. ラボ コンピューターにの Azure portal を表示している Web ブラウザーの画面で、**Cloud Shell** ペイン内の **PowerShell** シェル セッションを開きます。
-1. Cloud Shell ペインの PowerShell セッションから、以下を実行して、このラボで使用する Azure VM をホストする Azure Virtual Desktop セッションを開始します。
+1. ラボ コンピューターから Web ブラウザーを起動して [Azure portal](https://portal.azure.com) に移動し、このラボで使用するサブスクリプションの所有者ロールを持つユーザー アカウントの資格情報を入力してサインインします。
+1. ラボ コンピューターの Azure portal を表示しているブラウザー ウィンドウで、[**Cloud Shell**] ウィンドウの **PowerShell** セッションを開きます。
+
+   >**注**: 自動スケールで使用する予定のホスト プールは、**MaxSessionLimit** パラメーターの既定値以外で構成する必要があります。 この値は、Azure portal のホスト プール設定で構成するか、この例のように **Update-AzWvdHostPool** の Azure PowerShell コマンドレットを実行して構成します。 Azure portal でプールを作成するとき、または **New-AzWvdHostPool** Azure PowerShell コマンドレットを実行するときに、明示的に構成することもできます。
+
+1. [Cloud Shell] ウィンドウの PowerShell セッションで次のコマンドを実行して、**az140-21-hp1** ホスト プールの **MaxSessionLimit** パラメーターの値を **2** に設定します。 
 
    ```powershell
-   Get-AzVM -ResourceGroup 'az140-21-RG' | Start-AzVM -NoWait
+   Update-AzWvdHostPool -ResourceGroupName 'az140-21-RG' `
+   -Name az140-21-hp1 `
+   -MaxSessionLimit 2
    ```
 
-   >**注**:コマンドは非同期で実行されるので (-NoWait パラメーターによって決定されます)、同じ PowerShell セッション内で直後に別の PowerShell コマンドを実行できますが、Azure VM が実際に開始されるまでに数分かかります。 
+   >**注**: このラボでは、自動スケーリング動作のトリガーを容易にするために、**MaxSessionLimit** パラメーターの値が人為的に低く設定されています。
 
-#### <a name="task-2-create-and-configure-an-azure-automation-account"></a>タスク 2: Azure Automation アカウントを作成して構成する
+   >**注**: 最初のスケーリング プランを作成する前に、Azure サブスクリプションをターゲット スコープとして、**Desktop Virtualization Power On Off 共同作成者** RBAC ロールを Azure Virtual Desktop に割り当てる必要があります。 
 
-1. ラボのコンピューターから Web ブラウザーを起動し、[Azure portal](https://portal.azure.com) に移動し、このラボで使用するサブスクリプションの所有者の役割を持つユーザーアカウントの認証情報を提供してサインインします。
-1. Azure portal で、「**仮想マシン**」を検索して選択し、 **[Virtual Machines]** ブレードで、 **[az140-vm11]** を選択します。
-1. **[az140-dc-vm11]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[Bastion]** を選択し、 **[az140-dc-vm11 \| 接続]** ウィンドウの **[Bastion]** タブで **[Bastion を使用する]** を選択します。
-1. プロンプトが表示されたら、次の資格情報を入力し、**[接続]** を選択します。
+1. Azure portal が表示されているブラウザー ウィンドウで、[Cloud Shell] ウィンドウを閉じます。
+1. Azure portal で**サブスクリプション**を検索して選択し、サブスクリプションの一覧から Azure Virtual Desktop リソースを含むサブスクリプションを選択します。 
+1. [サブスクリプション] ページで、[**アクセス制御 (IAM)**] を選択します。
+1. [**アクセス制御 (IAM)**] ページのツールバーで **[+ 追加] ボタン**を選択して、ドロップダウン メニューで [**ロールの割り当ての追加**] を選択します。
+1. **ロールの割り当ての追加**ウィザードの [**ロール**] タブで、**Desktop Virtualization Power On Off 共同作成者**ロールを検索して選択し、[**次へ**] をクリックします。
+1. **ロールの割り当ての追加**ウィザードの [**メンバー**] タブで、[**+ メンバーの選択**] を選択し、**Azure Virtual Desktop** または **Windows Virtual Desktop** を検索して選択し、[**選択**] をクリックして [**次へ**] をクリックします。
+
+   >**注**: どちらの値を使用するかは、**Microsoft.DesktopVirtualization** リソース プロバイダーが Azure テナントに最初に登録された時期によって異なります。
+
+1. **[確認と割り当て]** タブで、 **[確認と割り当て]** を選択します。
+
+#### タスク 2: Azure Virtual Desktop セッション ホストのスケーリング プランを作成する
+
+1. ラボ コンピューターの Azure portal が表示されているブラウザーで、**Azure Virtual Desktop** を検索して選択します。 
+1. [**Azure Virtual Desktop**] ページで、[**スケーリング プラン**] を選択し、[**+ 作成**] を選択します。
+1. **スケーリング プランの作成**ウィザードの [**基本**] タブで、次の情報を指定し、[**次のスケジュール >**] を選択します (他は既定値のままにします)。
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**学生**|
-   |パスワード|**Pa55w.rd1234**|
+   |Resource group|新しいリソース グループの名前 **az140-51-RG**|
+   |名前|**az140-51-scaling-plan**|
+   |場所|前のラボでセッション ホストをデプロイしたのと同じ Azure リージョン|
+   |フレンドリ名|**az140-51 scaling plan**|
+   |タイム ゾーン|ローカル タイム ゾーン|
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、**Windows PowerShell ISE** を管理者として起動します。
-1. **[管理者: Windows PowerShell ISE]** コンソールで、次のように実行して、Azure サブスクリプションにサインインします。
+   >**注**: 除外タグを使用すると、スケーリング操作から除外するセッション ホストのタグ名を指定できます。 たとえば、例外タグ excludeFromScaling を使用することで、メンテナンス中に自動スケーリングがドレイン モードをオーバーライドしないようにするために、ドレイン モードに設定されている VM にタグを付けることができます。 
 
-   ```powershell
-   Connect-AzAccount
-   ```
+1. **スケーリング プランの作成**ウィザードの [**スケジュール**] タブで、[**+ スケジュールの追加**] を選択します。
+1. **スケジュールの追加**ウィザードの [**全般**] タブで、次の情報を指定し、[**次へ**] をクリックします。
 
-1. プロンプトが表示されたら、このラボで使用しているサブスクリプションで所有者の役割を持つユーザーアカウントの資格情報を使用してサインインします。
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のコマンドを実行して、自動スケール リューションの一部である Azure Automation アカウントの作成に使用する PowerShell スクリプトをダウンロードします。
-
-   ```powershell
-   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-   $labFilesfolder = 'C:\Allfiles\Labs\05'
-   New-Item -ItemType Directory -Path $labFilesfolder -Force
-   Set-Location -Path $labFilesfolder
-   $uri = 'https://raw.githubusercontent.com/Azure/RDS-Templates/master/wvd-templates/wvd-scaling-script/CreateOrUpdateAzAutoAccount.ps1'
-   Invoke-WebRequest -Uri $Uri -OutFile '.\CreateOrUpdateAzAutoAccount.ps1'
-   ```
-
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、スクリプト パラメーターに割り当てる変数の値を設定します。
-
-   ```powershell
-   $aadTenantId = (Get-AzContext).Tenant.Id
-   $subscriptionId = (Get-AzContext).Subscription.Id
-   $resourceGroupName = 'az140-51-RG'
-   $location = (Get-AzVirtualNetwork -ResourceGroupName 'az140-11-RG' -Name 'az140-adds-vnet11').Location
-   $suffix = Get-Random
-   $automationAccountName = "az140-automation-51$suffix"
-   $workspaceName = "az140-workspace-51$suffix"
-   ```
-
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、このラボで使用するリソース グループを作成します。
-
-   ```powershell
-   New-AzResourceGroup -ResourceGroupName $resourceGroupName -Location $location
-   ```
-
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、このラボで使用する Azure Log Analytics ワークスペースを作成します。
-
-   ```powershell
-   New-AzOperationalInsightsWorkspace -Location $location -Name $workspaceName -ResourceGroupName $resourceGroupName
-   ```
-
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内の、 **[管理者: Windows PowerShell ISE]** で、上部のメニューから [ファイル] を選択し、**C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzAutoAccount.ps1** スクリプトを開いて、**97**、**98**、**99** 行目に単一行コメント文字を、次のように追加します。
-
-   ```powershell
-   #    'Az.Compute'
-   #    'Az.Resources'
-   #    'Az.Automation'
-   ```
-
-1. **C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzAutoAccount.ps1** スクリプトで、**82** 行目と **86** 行目の間のコードを次のように複数行のコメントで囲み、変更をファイルに保存します。
-
-   ```powershell
-   <#
-   # Get the Role Assignment of the authenticated user
-   $RoleAssignments = Get-AzRoleAssignment -SignInName $AzContext.Account -ExpandPrincipalGroups
-   if (!($RoleAssignments | Where-Object { $_.RoleDefinitionName -in @('Owner', 'Contributor') })) {
-    throw 'Authenticated user should have the Owner/Contributor permissions to the subscription'
-   }
-   #>
-   ```
-   
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで新しいタブを開き、次のスクリプトを貼り付けて実行し、自動スケール ソリューションの一部である Azure Automation アカウントを作成します。
-
-   ```powershell
-   $Params = @{
-     "AADTenantId" = $aadTenantId
-     "SubscriptionId" = $subscriptionId 
-     "UseARMAPI" = $true
-     "ResourceGroupName" = $resourceGroupName
-     "AutomationAccountName" = $automationAccountName
-     "Location" = $location
-     "WorkspaceName" = $workspaceName
-   }
-
-   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-   .\CreateOrUpdateAzAutoAccount.ps1 @Params
-   ```
-
-   >**注**:スクリプトが完了するのを待ちます。 これには 10 分ほどかかる場合があります。
-
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、スクリプトの出力を確認します。 
-
-   >**注**:出力には、Webhook URI、Log Analytics ワークスペース ID、および自動スケール ソリューションの一部である Azure Logic App をプロビジョニングするときに提供する必要のある対応する主キー値が含まれます。 
-   
-   >**注**:Webhook フィールドの値を記録します。 このラボで後ほど必要になります。
-
-1. Azure Automation アカウントの構成を確認するには、**az140-dc-vm11** へのリモート デスクトップ セッション内で、Microsoft Edge を起動して、[Azure portal](https://portal.azure.com) に移動します。 プロンプトが表示されたら、このラボで使用しているサブスクリプションで所有者の役割を持つユーザーアカウントの資格情報を使用してサインインします。
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示している Microsoft Edge ウィンドウで、**Automationアカウント**を検索して選択し、**Automationアカウント** ブレードで、新しくプロビジョニングされたAzure Automation アカウント (名前は **az140-automation-51** プレフィックスで始まる) を表すエントリを選択します。
-1. [Automation Account] ブレードの左側の垂直メニューの **[Process Automation]** セクションで、 **[Runbooks]** を選択し、Runbook のリストで **WVDAutoScaleRunbookARMBased** Runbook の存在を確認します。
-1. [Automation Account] ブレードの左側の垂直メニューの **[アカウント設定]** セクションで、 **[アカウントとして実行]** を選択し、右側のアカウントのリストで、 **[+ Azure 実行アカウント]** の横にある **[作成]** をクリックします。
-1. **[Azure 実行アカウントの追加]** ブレードで、 **[作成]** をクリックし、新しいアカウントが正常に作成されたことを確認します。 
-<!--
-1. On the Automation Account blade, in the vertical menu on the left side, in the **Account Settings** section, select **Identity**.
-1. On the **System assigned** tab of the Identity blade of the automation account, set the **Status** to **On**, select **Save**, and, when prompted to  confirm, select **Yes**.
-1. On the **System assigned** tab of the Identity blade of the automation account, select **Azure role assignments**.
-1. On the **Azure role assignments** blade, select **+ Add role assignment (Preview)**.
-1. On the **Add role assignment (Preview)** blade, specify the following information and select **Save**.
-
-   |Setting|Value|
+   |設定|Value|
    |---|---|
-   |Scope|**Subscription**|
-   |Subscription|the name of the Azure subscription where you provisioned the host pool resources|
-   |Role|**Contributor**|
--->   
+   |スケジュール名|**az140-51-schedule**|
+   |繰り返し|**7 を選択** (すべての曜日を選択)|
 
-#### <a name="task-3-create-an-azure-logic-app"></a>タスク 3:Azure Logic App を作成する
+1. **スケジュールの追加**ウィザードの [**ランプアップ**] タブで、次の情報を指定し、[**次へ**] をクリックします。
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** ウィンドウに切り替え、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のコマンドを実行して、自動スケール ソリューションの一部である Azure Logic アプリの作成に使用する PowerShell スクリプトをダウンロードします。
+   |設定|Value|
+   |---|---|
+   |開始時刻 (24 時間システム)|現在の時刻から 9 時間を引いた時刻|
+   |負荷分散アルゴリズム|**幅優先**|
+   |ホストの最小割合 (%)|**20**|
+   |容量のしきい値 (%)|**60**|
 
-   ```powershell
-   $labFilesfolder = 'C:\Allfiles\Labs\05'
-   Set-Location -Path $labFilesfolder
-   $uri = "https://raw.githubusercontent.com/Azure/RDS-Templates/master/wvd-templates/wvd-scaling-script/CreateOrUpdateAzLogicApp.ps1"
-   Invoke-WebRequest -Uri $uri -OutFile ".\CreateOrUpdateAzLogicApp.ps1"
-   ```
+   >**注**: ここで選択した負荷分散設定によって、元のホスト プール設定で選択した設定がオーバーライドされます。
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内の、 **[管理者: Windows PowerShell ISE]** で、上部のメニューから **[ファイル]** を選択し、**C:\\Allfiles\\Labs\\05\\CreateOrUpdateAzLogicApp.ps1** スクリプトを開いて、**134** 行目と **138** 行目の間のコードを次のように複数行のコメントで囲んで、変更を保存します。
+   >**注**: ホストの最小割合には、常にオンにしておきたいセッション ホストの割合を入力します。 入力した割合が整数でない場合は、最も近い整数に切り上げされます。 
 
-   ```powershell
-   <#
-   # Get the Role Assignment of the authenticated user
-   $RoleAssignments = Get-AzRoleAssignment -SignInName $AzContext.Account -ExpandPrincipalGroups
-   if (!($RoleAssignments | Where-Object { $_.RoleDefinitionName -in @('Owner', 'Contributor') })) {
-    throw 'Authenticated user should have the Owner/Contributor permissions to the subscription'
-   }
-   #>
-   ```
+   >**注**: 容量のしきい値には、スケーリング アクションの実行をトリガーする使用可能なホスト プール容量の割合を入力します。 たとえば、最大セッション制限が 20 であるホスト プール内の 2 つのセッション ホストが稼働している場合、使用可能なホスト プールの容量は 40 になります。 容量のしきい値が 75% に設定され、セッション ホストに 30 を超えるユーザー セッションがある場合、自動スケーリングは 3 番目のセッション ホストを稼働させます。 これにより、使用可能なホスト プールの容量は 40 から 60 に変更されます。
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、スクリプト パラメーターに割り当てる変数の値を設定します (`<webhook_URI>` プレースホルダーを、このラボの前半で記録した Webhook URI の値に置き換えます)。
+1. **スケジュールの追加**ウィザードの [**ピーク時間**] タブで、次の情報を指定し、[**次へ**] をクリックします。
 
-   ```powershell
-   $AADTenantId = (Get-AzContext).Tenant.Id
-   $AzSubscription = (Get-AzContext).Subscription.Id
-   $ResourceGroup = Get-AzResourceGroup -Name 'az140-51-RG'
-   $WVDHostPool = Get-AzResource -ResourceType "Microsoft.DesktopVirtualization/hostpools" -Name 'az140-21-hp1'
-   $LogAnalyticsWorkspace = (Get-AzOperationalInsightsWorkspace -ResourceGroupName $ResourceGroup.ResourceGroupName)[0]
-   $LogAnalyticsWorkspaceId = $LogAnalyticsWorkspace.CustomerId
-   $LogAnalyticsWorkspaceKeys = (Get-AzOperationalInsightsWorkspaceSharedKey -ResourceGroupName $ResourceGroup.ResourceGroupName -Name $LogAnalyticsWorkspace.Name)
-   $LogAnalyticsPrimaryKey = $LogAnalyticsWorkspaceKeys.PrimarySharedKey
-   $RecurrenceInterval = 2
-   $BeginPeakTime = '1:00'
-   $EndPeakTime = '1:01'
-   $TimeDifference = '0:00'
-   $SessionThresholdPerCPU = 1
-   $MinimumNumberOfRDSH = 1
-   $MaintenanceTagName = 'CustomMaintenance'
-   $LimitSecondsToForceLogOffUser = 5
-   $LogOffMessageTitle = 'Autoscaling'
-   $LogOffMessageBody = 'Forcing logoff due to autoscaling'
+   |設定|Value|
+   |---|---|
+   |開始時刻 (24 時間システム)|現在の時刻から 8 時間を引いた時刻|
+   |負荷分散アルゴリズム|**深さ優先**|
 
-   $AutoAccount = (Get-AzAutomationAccount -ResourceGroupName $ResourceGroup.ResourceGroupName)[0]
-   $AutoAccountConnection = Get-AzAutomationConnection -ResourceGroupName $AutoAccount.ResourceGroupName -AutomationAccountName $AutoAccount.AutomationAccountName
+   >**注**: 開始時刻は、ランプアップ フェーズの終了時刻を指定します。
 
-   $WebhookURIAutoVar = '<webhook_URI>'
-   ```
+   >**注**: このフェーズの容量しきい値は、ランプアップ容量しきい値によって決まります。
 
-   >**注**:パラメーターの値は、自動スケール動作を加速することを目的としています。 実稼働環境では、特定の要件に一致するように調整する必要があります。
+1. **スケジュールの追加**ウィザードの [**ランプダウン**] タブで、次の情報を指定し、[**次へ**] をクリックします。
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、 **[管理者: Windows PowerShell ISE]** スクリプト ペインを開き、次のスクリプトを貼り付けて実行し、自動スケール ソリューションの一部である Azure Logic アプリを作成します。
+   |設定|Value|
+   |---|---|
+   |開始時刻 (24 時間システム)|現在の時刻から 2 時間を引いた時刻|
+   |負荷分散アルゴリズム|**深さ優先**|
+   |ホストの最小割合 (%)|"**10**"|
+   |容量のしきい値 (%)|**90**|
+   |Force logoff users(ユーザーの強制ログオフ)|**はい**|
+   |ユーザーをログアウトして VM をシャットダウンするまでの遅延時間 (分)|**30**|
 
-   ```powershell
-   $Params = @{
-     "AADTenantId"                   = $AADTenantId                             # Optional. If not specified, it will use the current Azure context
-     "SubscriptionID"                = $AzSubscription.Id                       # Optional. If not specified, it will use the current Azure context
-     "ResourceGroupName"             = $ResourceGroup.ResourceGroupName         # Optional. Default: "WVDAutoScaleResourceGroup"
-     "Location"                      = $ResourceGroup.Location                  # Optional. Default: "West US2"
-     "UseARMAPI"                     = $true
-     "HostPoolName"                  = $WVDHostPool.Name
-     "HostPoolResourceGroupName"     = $WVDHostPool.ResourceGroupName           # Optional. Default: same as ResourceGroupName param value
-     "LogAnalyticsWorkspaceId"       = $LogAnalyticsWorkspaceId                 # Optional. If not specified, script will not log to the Log Analytics
-     "LogAnalyticsPrimaryKey"        = $LogAnalyticsPrimaryKey                  # Optional. If not specified, script will not log to the Log Analytics
-     "ConnectionAssetName"           = $AutoAccountConnection.Name              # Optional. Default: "AzureRunAsConnection"
-     "RecurrenceInterval"            = $RecurrenceInterval                      # Optional. Default: 15
-     "BeginPeakTime"                 = $BeginPeakTime                           # Optional. Default: "09:00"
-     "EndPeakTime"                   = $EndPeakTime                             # Optional. Default: "17:00"
-     "TimeDifference"                = $TimeDifference                          # Optional. Default: "-7:00"
-     "SessionThresholdPerCPU"        = $SessionThresholdPerCPU                  # Optional. Default: 1
-     "MinimumNumberOfRDSH"           = $MinimumNumberOfRDSH                     # Optional. Default: 1
-     "MaintenanceTagName"            = $MaintenanceTagName                      # Optional.
-     "LimitSecondsToForceLogOffUser" = $LimitSecondsToForceLogOffUser           # Optional. Default: 1
-     "LogOffMessageTitle"            = $LogOffMessageTitle                      # Optional. Default: "Machine is about to shut down."
-     "LogOffMessageBody"             = $LogOffMessageBody                       # Optional. Default: "Your session will be logged off. Please save and close everything."
-     "WebhookURI"                    = $WebhookURIAutoVar
-   }
+   >**注**: **ユーザーの強制ログオフ**が有効になっている場合、自動スケーリングでは、ユーザー セッションの数が最も少ないセッション ホストがドレイン モードになり、アクティブなすべてのユーザー セッションにシャットダウンが迫っているという通知が送信され、指定された遅延時間が経過した後に強制的にサインアウトされます。 自動スケーリングは、すべてのユーザー セッションをサインアウトした後、VM の割り当てを解除します。 
 
-   .\CreateOrUpdateAzLogicApp.ps1 @Params
-   ```
+   >**注**: ランプダウン中に強制サインアウトを有効にしていない場合、アクティブなセッションまたは切断されたセッションがないセッション ホストの割り当てが解除されます。
 
-   >**注**:スクリプトが完了するのを待ちます。 これには 2 分ほどかかる場合があります。
+1. **スケジュールの追加**ウィザードの [**ピーク時間外**] タブで、次の情報を指定し、[**追加**] をクリックします。
 
-1. Azure Logic アプリの構成を確認するには、**az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示する Microsoft Edge ウィンドウに切り替え、**Logic Apps** を検索して選択し、 **[Logic Apps]** ブレードで、**az140-21-hp1_Autoscale_Scheduler** という名前の新しくプロビジョニングされた Azure Logic アプリを表すエントリを選択します。
-1. **[az140-21-hp1_Autoscale_Scheduler]** ブレードの左側にある垂直メニューの **[開発ツール]** セクションで、 **[ロジック アプリ デザイナー]** をクリックします。 
-1. [デザイナー] ペインで、 **"繰り返し"** というラベルの付いた長方形をクリックし、自動スケールの必要性が評価される頻度を制御するために使用できることに注意してください。 
+   |設定|Value|
+   |---|---|
+   |開始時刻 (24 時間システム)|現在の時刻から 1 時間を引いた時刻|
+   |負荷分散アルゴリズム|**深さ優先**|
 
-### <a name="exercise-2-verify-and-review-autoscaling-of-azure-virtual-desktop-session-hosts"></a>演習 2:Azure Virtual Desktop セッションホストの自動スケールを確認およびレビューする
+   >**注**: このフェーズの容量しきい値は、ランプダウン容量のしきい値によって決まります。
+
+1. **スケーリング プランの作成**ウィザードの [**スケジュール**] タブに戻り、[**次へ: ホスト プールの割り当て >**] を選択します。
+1. [**ホスト プールの割り当て**] ページの [**ホスト プールの選択**] ドロップダウン リストで **az140-21-hp1** を選択し、[**自動スケールの有効化**] チェックボックスが有効になっていることを確認し、[**確認と作成**] を選択して、[**作成**] を選択します。
+
+
+### 演習 2: Azure Virtual Desktop のセッション ホストの自動スケーリングを検証する
 
 この演習の主なタスクは次のとおりです。
 
-1. Azure Virtual Desktop セッションホストの自動スケールを確認する
-1. Azure Log Analytics を使用して Azure Virtual Desktop イベントを追跡する
+1. Azure Virtual Desktop の自動スケーリングを追跡するための診断を設定する
+1. Azure Virtual Desktop セッション ホストの自動スケーリングを検証する
 
-#### <a name="task-1-verify-autoscaling-of-azure-virtual-desktop-session-hosts"></a>タスク 1:Azure Virtual Desktop セッションホストの自動スケールを確認する
+#### タスク 1: Azure Virtual Desktop の自動スケーリングを追跡するための診断を設定する
 
-1. Azure Virtual Desktop セッション ホストの自動スケールを確認するには、**az140-dc-vm11** へのリモート デスクトップ セッション内の、Azure portal を表示している Microsoft Edge ウィンドウで、「**仮想マシン**」を検索して選択し、 **[仮想マシン]** ブレードで、**az140-21-RG** リソース グループ内の 3 つの Azure VM のステータスを確認します。
-1. 3 つの Azure VM のうち 2 つが割り当て解除の過程にあるか、すでに**停止 (割り当て解除)** されていることを確認します。
+1. ラボ コンピューターの Azure portal を表示しているブラウザー ウィンドウで、[**Cloud Shell**] ウィンドウの **PowerShell** セッションを開きます。
 
-   >**注**:自動スケールが機能していることを確認したらすぐに、Azure Logic アプリを無効にして、対応する料金を最小限に抑える必要があります。
+   >**注**: 自動スケーリング イベントを格納するには、Azure ストレージ アカウントを使用します。 このタスクに示すように、Azure portal から直接作成することも、Azure PowerShell を使用することもできます。
 
-1. Azure Logic アプリを無効にするには、**az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示する Microsoft Edge ウィンドウにで、**Logic Apps** を検索して選択し、 **[Logic Apps]** ブレードで、**az140-21-hp1_Autoscale_Scheduler** という名前の新しくプロビジョニングされた Azure Logic アプリを表すエントリを選択します。
-1. **[az140-21-hp1_Autoscale_Scheduler]** ブレードのツールバーで、 **[無効化]** をクリックします。 
-1. **[az140-21-hp1_Autoscale_Scheduler]** ブレードの **[Essentials]** セクションで、過去 24 時間の成功した実行の数や、再発の頻度を示す **[Summary]** セクションなどの情報を確認します。 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示している Microsoft Edge ウィンドウで、**Automationアカウント**を検索して選択し、**Automationアカウント** ブレードで、新しくプロビジョニングされたAzure Automation アカウント (名前は **az140-automation-51** プレフィックスで始まる) を表すエントリを選択します。
-1. **[Automation Account]** ブレードの左側の垂直メニューの **[Process Automation]** セクションで、 **[ジョブ]** を選択し、**WVDAutoScaleRunbookARMBased** Runbook の個々の呼び出しに対応するジョブのリストを確認します。
-1. 最新のジョブを選択し、そのブレードで **[すべてのログ]** タブのヘッダーをクリックします。 これにより、ジョブ実行ステップの詳細なリストが表示されます。
+1. [Cloud Shell] ウィンドウの PowerShell セッションで次のコマンドを実行して、新しい Azure Storage アカウントを作成します。
 
-#### <a name="task-2-use-azure-log-analytics-to-track-azure-virtual-desktop-events"></a>タスク 2:Azure Log Analytics を使用して Azure Virtual Desktop イベントを追跡する
-
->**注**:自動スケールやその他の Azure Virtual Desktop イベントを分析するには、Log Analytics を使用できます。
-
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示している Microsoft Edge ウィンドウで、**Log Analytics ワークスペース**を検索して選択し、 **[Log Analytics ワークスペース]** ブレードで、このラボで使用されている Azure Log Analytics ワークスペースを表すエントリを選択します (名前は **az140-workspace-51** プレフィックスで始まります)。
-1. [Log Analytics ワークスペース] ブレードの左側の垂直メニューの **[全般]** セクションで、 **[ログ]** をクリックし、必要に応じて **[Log Analytics へようこそ]** ウィンドウを閉じ、 **[クエリ]** ペインに進みます。
-1. **[クエリ]** ペインの左側にある **[すべてのクエリ]** 垂直メニューで、 **[Azure Virtual Desktop]** を選択し、事前定義されたクエリを確認します。
-1. **[クエリ]** ペインを閉じます。 これにより、 **[新しいクエリ 1]** タブが自動的に表示されます。
-1. [クエリ] ウィンドウで、次のクエリを貼り付け、 **[実行]** をクリックして、このラボで使用されているホスト プールのすべてのイベントを表示します。
-
-   ```kql
-   WVDTenantScale_CL
-   | where hostpoolName_s == "az140-21-hp1"
-   | project TimeStampUTC = TimeGenerated, TimeStampLocal = TimeStamp_s, HostPool = hostpoolName_s, LineNumAndMessage = logmessage_s, AADTenantId = TenantId
+   ```powershell
+   $resourceGroupName = 'az140-51-RG'
+   $location = (Get-AzResourceGroup -ResourceGroupName $resourceGroupName).Location
+   $suffix = Get-Random
+   $storageAccountName = "az140st51$suffix"
+   New-AzStorageAccount -Location $location -Name $storageAccountName -ResourceGroupName $resourceGroupName -SkuName Standard_LRS
    ```
 
-   >**注**:切り取って貼り付けたコンストラクトを使用しているときに、2 行目に余分なパイプ文字 (|) があった場合は、エラーを回避するためにそれを削除してください。 これは、各クエリに適用することができます。
-   >**注**:結果が表示されない場合は、数分待ってからもう一度確認してください。
+   >**注**: ストレージ アカウントがプロビジョニングされるまで待ちます。
 
-1. [クエリ] ウィンドウで、次のクエリを貼り付け、 **[実行]** をクリックして、ターゲット ホスト プールで現在実行中のセッション ホストとアクティブなユーザー セッションの総数を表示します。
+1. Azure portal が表示されているブラウザー ウィンドウで、[Cloud Shell] ウィンドウを閉じます。
+1. ラボ コンピューターの Azure portal が表示されているブラウザーで、前の演習で作成したスケーリング プランのページに移動します。
+1. **az140-51-scaling-plan** ページで、[**診断設定**] を選択し、[**+ 診断設定の追加**] を選択します。
+1. [**診断設定**] ページの [**診断設定名**] テキストボックスに「**az140-51-scaling-plan-diagnostics**」と入力し、[**カテゴリ グループ**] セクションで **allLogs** を選択します。 
+1. 同じページの [**宛先の詳細**] セクションで、[**ストレージ アカウントへのアーカイブ**] を選択し、[**ストレージ アカウント**] ドロップダウン リストで、**az140st51** プレフィックスで始まるストレージ アカウント名を選択します。
+1. **[保存]** を選択します。
 
-   ```kql
-   WVDTenantScale_CL
-   | where logmessage_s contains "Number of running session hosts:"
-     or logmessage_s contains "Number of user sessions:"
-     or logmessage_s contains "Number of user sessions per Core:"
-   | where hostpoolName_s == "az140-21-hp1"
-   | project TimeStampUTC = TimeGenerated, TimeStampLocal = TimeStamp_s, HostPool = hostpoolName_s, LineNumAndMessage = logmessage_s, AADTenantId = TenantId
+#### タスク 2: Azure Virtual Desktop のセッション ホストの自動スケーリングを検証する
+
+1. ラボ コンピューターの Azure portal を表示しているブラウザー ウィンドウで、[**Cloud Shell**] ウィンドウの **PowerShell** セッションを開きます。
+1. [Cloud Shell] ウィンドウの PowerShell セッションで、次のコマンドを実行して、このラボで使用する Azure Virtual Desktop セッション ホストの Azure VM を開始します。
+
+   ```powershell
+   Get-AzVM -ResourceGroup 'az140-21-RG' | Start-AzVM
    ```
 
-1. [クエリ] ウィンドウで、次のクエリを貼り付け、 **[実行]** をクリックして、ホスト プールですべてのセッション ホスト VM のステータスを表示を表示します。
+   >**注**: セッション ホストの Azure VM が実行されるまで待ちます。
 
-   ```kql
-   WVDTenantScale_CL
-   | where logmessage_s contains "Session host:"
-   | where hostpoolName_s == "az140-21-hp1"
-   | project TimeStampUTC = TimeGenerated, TimeStampLocal = TimeStamp_s, HostPool = hostpoolName_s, LineNumAndMessage = logmessage_s, AADTenantId = TenantId
+1. ラボ コンピューターの Azure portal が表示されている Web ブラウザー ウィンドウで、**az140-21-hp1** ホスト プールのページに移動します。
+1. **az140-21-hp1** ページで、[**セッション ホスト**] を選択します。
+1. 少なくとも 1 つのセッション ホストが**シャットダウン**の状態で一覧表示されるまで待ちます。
+
+   >**注**: セッション ホストの状態を更新するには、ページの更新が必要になる場合があります。
+
+   >**注**: すべてのセッション ホストが使用できる状態のままになっている場合は、**az140-51-scaling-plan** ページに戻り、**ホストの最小割合 (%)** **ランプダウン**設定の値を小さくします。
+
+   >**注**: 1 つ以上のセッション ホストの状態が変更されると、自動スケーリング ログを Azure Storage アカウントで使用できるようになります。 
+
+1. Azure portal で**ストレージ アカウント**を検索して選択し、[**ストレージ アカウント**] ページで、この演習で前に作成したストレージ アカウント (**az140st51** プレフィックスで始まる名前) を表すエントリを選択します。
+1. [ストレージ アカウント] ページで、[**コンテナー**] を選択します。
+1. コンテナーの一覧で、**insights-logs-autoscale** を選択します。
+1. **insights-logs-autoscale** ページで、コンテナーに格納されている JSON 形式の BLOB を表すエントリに到達するまで、フォルダー階層を移動します。
+1. BLOB エントリを選択し、ページの右端にある省略記号アイコンを選択し、ドロップダウン メニューで [**ダウンロード**] を選択します。
+1. ラボ コンピューターで、ダウンロードした BLOB を任意のテキスト エディターで開き、その内容を確認します。 自動スケーリング イベントへの参照が見つかるはずです。 
+
+   >**注**: 自動スケール イベントへの参照を含むサンプル BLOB コンテンツを次に示します。
+
+   ```json
+   host_Ring    "R0"
+   Level    4
+   ActivityId   "00000000-0000-0000-0000-000000000000"
+   time "2023-03-26T19:35:46.0074598Z"
+   resourceId   "/SUBSCRIPTIONS/AAAAAAAE-0000-1111-2222-333333333333/RESOURCEGROUPS/AZ140-51-RG/PROVIDERS/MICROSOFT.DESKTOPVIRTUALIZATION/SCALINGPLANS/AZ140-51-SCALING-PLAN"
+   operationName    "ScalingEvaluationSummary"
+   category "Autoscale"
+   resultType   "Succeeded"
+   level    "Informational"
+   correlationId    "ddd3333d-90c2-478c-ac98-b026d29e24d5"
+   properties   
+   Message  "Active session hosts are at 0.00% capacity (0 sessions across 3 active session hosts). This is below the minimum capacity threshold of 90%. 2 session hosts can be drained and deallocated."
+   HostPoolArmPath  "/subscriptions/aaaaaaaa-0000-1111-2222-333333333333/resourcegroups/az140-21-rg/providers/microsoft.desktopvirtualization/hostpools/az140-21-hp1"
+   ScalingEvaluationStartTime   "2023-03-26T19:35:43.3593413Z"
+   TotalSessionHostCount    "3"
+   UnhealthySessionHostCount    "0"
+   ExcludedSessionHostCount "0"
+   ActiveSessionHostCount   "3"
+   SessionCount "0"
+   CurrentSessionOccupancyPercent   "0"
+   CurrentActiveSessionHostsPercent "100"
+   Config.ScheduleName  "az140-51-schedule"
+   Config.SchedulePhase "OffPeak"
+   Config.MaxSessionLimitPerSessionHost "2"
+   Config.CapacityThresholdPercent  "90"
+   Config.MinActiveSessionHostsPercent  "5"
+   DesiredToScaleSessionHostCount   "-2"
+   EligibleToScaleSessionHostCount  "1"
+   ScalingReasonType    "DeallocateVMs_BelowMinSessionThreshold"
+   BeganForceLogoffOnSessionHostCount   "0"
+   BeganDeallocateVmCount   "1"
+   BeganStartVmCount    "0"
+   TurnedOffDrainModeCount  "0"
+   TurnedOnDrainModeCount   "1"
    ```
 
-1. [クエリ] ウィンドウで、次のクエリを貼り付け、 **[実行]** をクリックして、スケーリング関連のエラーと警告を表示します。
 
-   ```kql
-   WVDTenantScale_CL
-   | where logmessage_s contains "ERROR:" or logmessage_s contains "WARN:"
-   | project TimeStampUTC = TimeGenerated, TimeStampLocal = TimeStamp_s, HostPool = hostpoolName_s, LineNumAndMessage = logmessage_s, AADTenantId = TenantId
-   ```
-
->**注**:`TenantId` に関する次のようなエラー メッセージは無視してください
-
-### <a name="exercise-3-stop-and-deallocate-azure-vms-provisioned-in-the-lab"></a>演習 3:ラボでプロビジョニングされた Azure VM を停止および割り当て解除する
+### 演習 3: ラボでプロビジョニングされた Azure VM を停止して割り当てを解除する
 
 この演習の主なタスクは次のとおりです。
 
-1. ラボでプロビジョニングされた Azure VM を停止および割り当て解除する
+1. ラボでプロビジョニングされた Azure VM を停止して割り当てを解除する
 
->**注**:この演習では、このラボでプロビジョニングした Azure VM を割り当て解除し、対応するコンピューティング料金を最小化します
+>**注**: この演習では、関連するコンピューティング料金を最小限に抑えるために、このラボで使用された Azure VM の割り当てを解除します。
 
-#### <a name="task-1-deallocate-azure-vms-provisioned-in-the-lab"></a>タスク 1:ラボでプロビジョニングされた Azure VM を割り当て解除する
+#### タスク 1: ラボでプロビジョニングされた Azure VM の割り当てを解除する
 
-1. ラボ コンピューターに切り替え、Azure portal を表示している Web ブラウザーの画面で、**Cloud Shell** ペイン内の **PowerShell** シェル セッションを開きます。
-1. Cloud Shell ペインの PowerShell セッションから、以下を実行して、このラボで作成されたすべての Azure VM を一覧表示します。
+1. ラボ コンピューターに切り替えて、Azure portal を表示している Web ブラウザー ウィンドウの [**Cloud Shell**] ウィンドウで **PowerShell** セッションを開きます。
+1. [Cloud Shell] ウィンドウの PowerShell セッションから次のコマンドを実行して、このラボで使用されているすべての Azure VM を一覧表示します。
 
    ```powershell
    Get-AzVM -ResourceGroup 'az140-21-RG'
    ```
 
-1. Cloud Shell ペインの PowerShell セッションから、以下を実行して、このラボで作成されたすべての Azure VM を停止して割り当てを解除します。
+1. [Cloud Shell] ウィンドウの PowerShell セッションから次のコマンドを実行して、このラボで使用したすべての Azure VM を停止して割り当てを解除します。
 
    ```powershell
    Get-AzVM -ResourceGroup 'az140-21-RG' | Stop-AzVM -NoWait -Force
    ```
 
-   >**注**:コマンドは非同期で実行されるので (-NoWait パラメーターによって決定されます)、同じ PowerShell セッション内で直後に別の PowerShell コマンドを実行できますが、Azure VM が実際に停止されて割り当てが解除されるまでに数分かかります。
+   >**注**: このコマンドは非同期で実行されるため (-NoWait パラメーターによって決定されます)、同じ PowerShell セッション内で直後に別の PowerShell コマンドを実行できますが、Azure VM が実際に停止されて割り当てが解除されるまでに数分かかります。
