@@ -73,7 +73,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop プロファイル管理を�
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**aadadmin1@adatum.com**|
+   |ユーザー名|**aadadmin1@adatum.com**|
    |Password|以前に構成したパスワード|
 
 1. **az140-cl-vm11a** への Bastion セッション内のスタート メニューで、**Windows 管理ツール** フォルダーに移動して展開し、**[Active Directory ユーザーとコンピューター]** を選択します。

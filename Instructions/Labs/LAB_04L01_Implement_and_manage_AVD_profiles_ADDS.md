@@ -52,8 +52,8 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop プロ�
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**student@adatum.com**|
-   |Password|**Pa55w.rd1234**|
+   |ユーザー名|**student@adatum.com**|
+   |パスワード|**Pa55w.rd1234**|
 
 1. **az140-21-p1-0** への Bastion セッション内で、Microsoft Edge を起動して、[Azure portal](https://portal.azure.com) に移動します。 プロンプトが表示されたら、このラボで使用するサブスクリプションの所有者ロールを持つユーザー アカウントの Microsoft Entra 資格情報を指定してサインインします。
 1. **az140-21-p1-0** への Bastion セッション内で、Azure portal を表示している [Microsoft Edge] ウィンドウの [Cloud Shell] ペイン内にある [PowerShell] セッションを開きます。 
@@ -187,8 +187,8 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop プロ�
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**Student@adatum.com**|
-   |Password|**Pa55w.rd1234**|
+   |ユーザー名|**Student@adatum.com**|
+   |パスワード|**Pa55w.rd1234**|
 
 1. **az140-cl-vm11** への Bastion セッション内で、**[スタート]** をクリックし、**[スタート]** メニューで、**[リモート デスクトップ]** をクリックしてリモート デスクトップ クライアントを起動します。
 1. **az140-cl-vm11** への Bastion セッション内で、**[リモート デスクトップ]** クライアント ウィンドウの **[サブスクライブ]** を選択し、プロンプトが表示されたら、**aduser1** の認証情報でサインインします。

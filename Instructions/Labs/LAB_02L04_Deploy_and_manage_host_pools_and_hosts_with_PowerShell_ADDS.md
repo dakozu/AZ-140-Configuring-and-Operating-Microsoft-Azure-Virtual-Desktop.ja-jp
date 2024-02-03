@@ -179,7 +179,7 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    |設定|値|
    |---|---|
    |[ユーザー名]|**ADATUM\\Student**|
-   |Password|**Pa55w.rd1234**|
+   |パスワード|**Pa55w.rd1234**|
 
 1. **az140-24-p3-0** へのリモート デスクトップ セッション内で、**Windows PowerShell ISE** を管理者として起動します。
 1. **az140-24-p3-0** へのリモート デスクトップ セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインから以下を実行して、新しくデプロイされた Azure VM を、このラボの前半でプロビジョニングしたホストプールにセッション ホストとして追加するために必要なファイルをホストするフォルダーを作成します。

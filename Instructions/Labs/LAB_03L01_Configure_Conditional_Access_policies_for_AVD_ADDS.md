@@ -119,8 +119,8 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**ADATUM\Student**|
-   |Password|**Pa55w.rd1234**|
+   |ユーザー名|**ADATUM\Student**|
+   |パスワード|**Pa55w.rd1234**|
 
 1. **[Microsoft Entra Connect]** ウィンドウの **「SCP 構成」** ページに戻り、**[次へ]** を選択します。
 1. **[Microsoft Entra Connect]** ウィンドウの **「構成の準備完了」** ページで、**[構成]** を選択し、構成が完了したら **[終了]** を選択します。
@@ -236,8 +236,8 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**Student@adatum.com**|
-   |Password|**Pa55w.rd1234**|
+   |ユーザー名|**Student@adatum.com**|
+   |パスワード|**Pa55w.rd1234**|
 
 1. **az140-cl-vm11** への Bastion セッション内で、Microsoft Edge を起動し、[https://rdweb.wvd.microsoft.com/arm/webclient](https://rdweb.wvd.microsoft.com/arm/webclient) にある Azure Virtual Desktop HTML5 Web クライアント ページに移動します。
 

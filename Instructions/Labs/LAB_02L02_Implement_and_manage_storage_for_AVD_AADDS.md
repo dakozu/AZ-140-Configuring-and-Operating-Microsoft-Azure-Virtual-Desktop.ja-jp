@@ -52,7 +52,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop デプロイのストレー�
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**aadadmin1@adatum.com**|
+   |ユーザー名|**aadadmin1@adatum.com**|
    |Password|パスワードは以前に定義されています|
 
 1. **az140-cl-vm11a** の Azure VMへの Bastion セッション内で、Microsoft Edge を起動し、[Azure portal](https://portal.azure.com) に移動して、**aadadmin1** ユーザー アカウントのユーザー プリンシパル名と、このアカウントの作成時に設定したパスワードを入力してサインインします。
@@ -65,7 +65,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop デプロイのストレー�
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|新しいリソース グループの名前 **az140-22a-RG**|
+   |リソース グループ|新しいリソース グループの名前 **az140-22a-RG**|
    |ストレージ アカウント名|3 文字から 15 文字の長さで、アルファベットの小文字と数字で構成され、アルファベットで始まる、グローバルに一意の任意の名前|
    |場所|Azure Virtual Desktop ラボ環境をホストしている Azure リージョンの名前|
    |パフォーマンス|**Standard**|

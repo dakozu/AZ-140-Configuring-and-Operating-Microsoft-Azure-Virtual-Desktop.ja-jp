@@ -52,8 +52,8 @@ Microsoft Entra DS 環境で Azure Virtual Desktop デプロイのストレー�
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**Student@adatum.com**|
-   |Password|**Pa55w.rd1234**|
+   |ユーザー名|**Student@adatum.com**|
+   |パスワード|**Pa55w.rd1234**|
 
 1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Microsoft Edge を起動して、[Azure portal](https://portal.azure.com) に移動します。 ダイアログが表示されたら、このラボで使用するサブスクリプションの所有者ロールをもつユーザー アカウントの Microsoft Entra 資格情報を指定してサインインします。
 1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、Azure portal を表示している Microsoft Edge ウィンドウで「**ストレージ アカウント**」を検索して選択し、**[ストレージ アカウント]** ブレードで **[+ 追加]** を選択します。
@@ -62,7 +62,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop デプロイのストレー�
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|新しいリソース グループの名前 **az140-22-RG**|
+   |リソース グループ|新しいリソース グループの名前 **az140-22-RG**|
    |ストレージ アカウント名|3 文字から 15 文字の長さで、小文字のアルファベットと数字で構成され、アルファベットで始まるグローバルに一意の任意の名前|
    |リージョン|Azure Virtual Desktop ラボ環境をホストしている Azure リージョンの名前|
    |パフォーマンス|**Standard**|

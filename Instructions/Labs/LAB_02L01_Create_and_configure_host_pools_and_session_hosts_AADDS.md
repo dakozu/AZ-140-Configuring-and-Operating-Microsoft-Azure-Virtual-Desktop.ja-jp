@@ -52,7 +52,7 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
 
    |設定|値|
    |---|---|
-   |[ユーザー名]|**aadadmin1@adatum.com**|
+   |ユーザー名|**aadadmin1@adatum.com**|
    |Password|以前のラボで定義したパスワード|
 
 1. **az140-cl-vm11a** の Azure VM への Bastion 内で Microsoft Edge を起動し、[Azure portal](https://portal.azure.com) に移動し、**aadadmin1** ユーザー アカウントのユーザー プリンシパル名と、このアカウントの作成時に設定したパスワードを入力してサインインします。
@@ -76,7 +76,7 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|新しいリソース グループの名前 **az140-21a-RG**|
+   |リソース グループ|新しいリソース グループの名前 **az140-21a-RG**|
    |ホスト プール名|**az140-21a-hp1**|
    |場所|このラボの前半で Microsoft Entra DS インスタンスをデプロイした Azure リージョンの名前|
    |検証環境|**いいえ**|
@@ -91,17 +91,17 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
    |設定|Value|
    |---|---|
    |[仮想マシンの追加]|**はい**|
-   |Resource group|**既定はホスト プールと同じ**|
+   |リソース グループ|**既定はホスト プールと同じ**|
    |名前のプレフィックス|**az140-21-p1**|
    |仮想マシンの場所|このラボの最初の演習でリソースをデプロイした Azure リージョンの名前|
-   |可用性オプション|**インフラストラクチャ冗長は必要ありません**|
+   |可用性のオプション|**インフラストラクチャ冗長は必要ありません**|
    |セキュリティの種類|**Standard**|
-   |イメージ|**Windows 11 Enterprise マルチセッション + Microsoft 365 Apps、バージョン 22H2**|
+   |Image|**Windows 11 Enterprise マルチセッション + Microsoft 365 Apps、バージョン 22H2**|
    |[仮想マシンのサイズ]|**Standard D2s v3**|
    |[Number of VMs](VM の数)|**2**|
    |OS ディスクの種類|**Standard SSD**|
    |仮想ネットワーク|**az140-aadds-vnet11a**|
-   |サブネット|**hp1-Subnet (10.10.1.0/24)**|
+   |Subnet|**hp1-Subnet (10.10.1.0/24)**|
    |ネットワーク セキュリティ グループ|**Basic**|
    |パブリック インバウンド ポート|**いいえ**|
    |参加したいディレクトリを選択する|**Active Directory**|
@@ -136,7 +136,7 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|**az140-21a-RG**|
+   |リソース グループ|**az140-21a-RG**|
    |ホスト プール|**az140-21a-hp1**|
    |アプリケーション グループの種類|**RemoteApp**|
    |アプリケーション グループ名|**az140-21a-hp1-Office365-RAG**|
@@ -192,7 +192,7 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|**az140-21a-RG**|
+   |リソース グループ|**az140-21a-RG**|
    |ホスト プール|**az140-21a-hp1**|
    |アプリケーション グループの種類|**RemoteApp**|
    |アプリケーション グループ名|**az140-21a-hp1-Utilities-RAG**|
@@ -232,7 +232,7 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|**az140-21a-RG**|
+   |リソース グループ|**az140-21a-RG**|
    |ワークスペース名|**az140-21a-ws1**|
    |フレンドリ名|**az140-21a-ws1**|
    |場所|このラボでリソースをデプロイした Azure リージョンの名前||

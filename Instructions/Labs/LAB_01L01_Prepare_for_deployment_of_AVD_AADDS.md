@@ -180,7 +180,7 @@ Azure Active Directory Domain Services (Microsoft Entra DS) 環境での Azure V
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|新しい **az140-11a-RG**の作成を選択します|
+   |リソース グループ|新しい **az140-11a-RG**の作成を選択します|
    |DNS ドメイン名|**adatum.com**|
    |リージョン|AVD デプロイをホストするリージョンの名前|
    |SKU|**Standard**|
@@ -313,12 +313,12 @@ Azure Active Directory Domain Services (Microsoft Entra DS) 環境での Azure V
    |設定|値|
    |---|---|
    |サブスクリプション|このラボで使用している Azure サブスクリプションの名前|
-   |Resource group|**az140-11a-RG**|
+   |リソース グループ|**az140-11a-RG**|
    |名前|**az140-11a-bastion**|
    |リージョン|この演習の前のタスクでリソースをデプロイしたリージョンと同じ Azure リージョン|
    |レベル|**Basic**|
    |仮想ネットワーク|**az140-aadds-vnet11a**|
-   |サブネット|**AzureBastionSubnet (10.10.254.0/24)**|
+   |Subnet|**AzureBastionSubnet (10.10.254.0/24)**|
    |パブリック IP アドレス|**新規作成**|
    |パブリック IP の名前|**az140-aadds-vnet11a-ip**|
 

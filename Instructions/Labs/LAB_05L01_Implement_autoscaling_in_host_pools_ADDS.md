@@ -80,7 +80,7 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop セッ�
 
    |設定|値|
    |---|---|
-   |Resource group|新しいリソース グループの名前 **az140-51-RG**|
+   |リソース グループ|新しいリソース グループの名前 **az140-51-RG**|
    |名前|**az140-51-scaling-plan**|
    |場所|前のラボでセッション ホストをデプロイしたのと同じ Azure リージョン|
    |フレンドリ名|**az140-51 scaling plan**|
