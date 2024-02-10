@@ -454,7 +454,7 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop アプ�
    |MSIX パッケージ|パッケージの作成時に生成される名前|
    |[表示名]|**XML Notepad**|
    |登録タイプ|**オンデマンド**|
-   |状態|**アクティブ**|
+   |都道府県|**アクティブ**|
 
 #### タスク 4: MSIX アプリをアプリケーション グループに公開する
 
