@@ -38,6 +38,8 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop アプ�
 
 ## 手順
 
+>**重要**: Microsoft は、**Azure Active Directory** (**Azure AD**) の名称を **Microsoft Entra ID** に変更しました。 この変更の詳細については、「[Azure Active Directory の新しい名前](https://learn.microsoft.com/en-us/entra/fundamentals/new-name)」を参照してください。 これは現在進行中の取り組みであるため、個々の演習を進めるときに、ラボの指示とインターフェイスの要素間にまだ不一致が残っている可能性があります。 この点を念頭に置いてください (特に、このラボでは、**Microsoft Entra Connect** は **Azure Active Directory Connect** の新しい名称です)。
+
 ### 演習 1: MSIX アプリ パッケージの準備と作成
 
 この演習の主なタスクは次のとおりです。
@@ -464,18 +466,17 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop アプ�
 1. **[Azure Virtual Desktop \| アプリケーション グループ]** ウィンドウで、**[az140-21-hp1-Utilities-RAG]** アプリケーション グループ エントリを選択します。
 1. **[az140-21-hp1-Utilities-RAG]** ブレードの左側の垂直方向のメニューにある **[管理]** セクションで、**[アプリケーション]** を選択します。 
 1. **[az140-21-hp1-Utilities-RAG \| アプリケーション]** ブレードで、**[+ 追加]** をクリックします。
-1. **[アプリケーションの追加]** ブレードで、次のように設定してから **[保存]** を選択します。
+1. **[アプリケーションの追加]** ブレードで **[基本]** タブと **[アイコン]** タブで次の設定を指定し、**[保存]** を選びます。
 
    |設定|Value|
    |---|---|
-   |アプリケーション ソース|**MSIX パッケージ**|
-   |MSIX パッケージ|イメージに含まれるパッケージを表す名前|
-   |MSIX アプリケーション|**XMLNOTEPAD**|
-   |アプリケーション名|**XML Notepad**|
+   |アプリケーション ソース|**アプリ アタッチ**|
+   |Package|イメージに含まれるパッケージを表す名前|
+   |アプリケーション|**XMLNOTEPAD**|
+   |アプリケーション識別子|**XML Notepad**|
    |[表示名]|**XML Notepad**|
    |説明|**XML Notepad**|
-   |Icon path (アイコン パス)|**C:\\Program Files\\WindowsApps\\XmlNotepad_2.8.0.0_x64__4vm7ty4fw38e8\\VFS\\ProgramFilesX86\\LovettSoftware\\XmlNotepad\\XmlNotepad.exe**|
-   |Icon Index (アイコン インデックス)|**0**|
+   |アイコン ソース|**既定値**|
 
 1. **[Azure Virtual Desktop \| アプリケーション グループ]** ウィンドウに戻り、**[az140-21-hp1-DAG]** アプリケーション グループ エントリを選択します。
 1. **az140-21-hp1-DAG** ブレードの左側にある垂直方向のメニューの **[管理]** セクションで、**[アプリケーション]** を選択します。 
