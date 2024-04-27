@@ -1,7 +1,7 @@
 ---
 lab:
   title: 'ラボ: Azure Virtual Desktop のデプロイを準備する (AD DS)'
-  module: 'Module 1: Plan a AVD Architecture'
+  module: 'Module 1: Plan an AVD Architecture'
 ---
 
 # ラボ - Azure Virtual Desktop のデプロイを準備する (AD DS)
