@@ -19,7 +19,7 @@ lab:
 
 ## ラボのシナリオ
 
-Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作成して管理する必要があります。
+AD DS 環境では、Azure Virtual Desktop ホスト イメージを作成して管理する必要があります。
 
 ## 目標
   
@@ -34,7 +34,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 
 ## 手順
 
-### 演習 1: セッション ホスト イメージを作成して管理する
+### 演習 1:セッション ホスト イメージを作成して管理する
   
 この演習の主なタスクは次のとおりです。
 
@@ -49,7 +49,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 1. ラボ コンピューターから Web ブラウザーを起動して [Azure portal](https://portal.azure.com) に移動し、このラボで使用するサブスクリプションの所有者ロールを持つユーザー アカウントの資格情報を指定してサインインします。
 1. Azure portal で、検索テキスト ボックスのすぐ右にあるツール バー アイコンを選択して **[Cloud Shell]** ペインを開きます。
 1. **Bash** または **PowerShell** の選択を求めるメッセージが表示されたら、 **[PowerShell]** を選択します。 
-1. ラボのコンピューターで、Azure portal を表示している Web ブラウザーで、[Cloud Shell] ペインの [PowerShell] セッションから次を実行して、Azure Virtual Desktop ホスト イメージを含むリソース グループを作成します。
+1. Azure portal が表示されているラボ コンピューターの Web ブラウザーで、Cloud Shell ペインの PowerShell セッションから次を実行して、Azure Virtual Desktop ホスト イメージを含めるために使用されるリソース グループを作成します。
 
    ```powershell
    $vnetResourceGroupName = 'az140-11-RG'
@@ -59,7 +59,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    ```
 
 1. Azure portal の Cloud Shell ペインのツール バーで、**[ファイルのアップロード/ダウンロード]** アイコンを選び、ドロップダウン メニューで **[アップロード]** を選んで、ファイル **\\\\AZ-140\\AllFiles\\Labs\\02\\az140-25_azuredeployvm25.json** と **\\\\AZ-140\\AllFiles\\Labs\\02\\az140-25_azuredeployvm25.parameters.json** を Cloud Shell のホーム ディレクトリにアップロードします。
-1. [Cloud Shell] ペインの PowerShell セッションから、次を実行して、新しく作成されたサブネットに Azure Virtual Desktop クライアントとして機能する Windows 10 を実行する Azure VM をデプロイします。
+1. Cloud Shell ペインの PowerShell セッションから次を実行して、ソース イメージとして機能する、Windows 11 Enterprise が実行されている Azure VM をデプロイします。
 
    ```powershell
    New-AzResourceGroupDeployment `
@@ -69,7 +69,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
      -TemplateParameterFile $HOME/az140-25_azuredeployvm25.parameters.json
    ```
 
-   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには約 10 分かかります。
+   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには約 5 から 10 分かかります。
 
 #### タスク 2: Azure Bastion をデプロイする 
 
@@ -109,20 +109,18 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 
 1. **[Bastion の作成]** ウィンドウの **[確認と作成]** タブで、**[作成]** を選択します。
 
-   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには約 5 分かかります。
+   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには約 10 分かかります。
 
-#### タスク 3: Azure Virtual Desktop ホスト イメージを構成する
+#### タスク 3:Azure Virtual Desktop ホスト イメージを構成する
 
 1. Azure portal で、**[仮想マシン]** を見つけて選択し、**[仮想マシン]** ウィンドウで、**az140-25-vm0** を選択します。
-1. **[az140-25-vm0]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[Bastion]** を選択し、**[az140-25-vm0 \| 接続]** ウィンドウの **[Bastion]** タブで **[Bastion を使用する]** を選択します。
+1. **[az140-25-vm0]** ブレードで **[接続]** を選択し、ドロップダウン メニューで **[Bastion 経由で接続する]** を選択します。
 1. プロンプトが表示されたら、次の資格情報を入力し、**[接続]** を選択します。
 
    |設定|値|
    |---|---|
    |[ユーザー名]|**Student**|
    |パスワード|**Pa55w.rd1234**|
-
-   > **注**: まず FSLogix バイナリをインストールします。
 
 1. **az140-25-vm0** への Bastion セッション内で、**Windows PowerShell ISE** を管理者として起動します。
 1. **az140-25-vm0** への Bastion セッション内で、[**Administrator: Windows PowerShell ISE**] コンソールから次を実行して、イメージを構成するための一時的な場所として使用するフォルダーを作成します。
@@ -131,17 +129,9 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    New-Item -Type Directory -Path 'C:\Allfiles\Labs\02' -Force
    ```
 
-1. **az140-25-vm0** への Bastion セッション内で、Microsoft Edge を起動し、[「FSLogix ダウンロード ページ」](https://aka.ms/fslogix_download)を参照し、FSLogix 圧縮インストール バイナリを **C:\\Allfiles\\Labs\\02** フォルダーにダウンロードし、ファイル エクスプローラーから **x64** サブフォルダーを同じフォルダーに抽出します。
-1. **az140-25-vm0** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** ウィンドウに切り替え、**[Administrator: Windows PowerShell ISE]** コンソールから次を実行して、OneDrive のマシンごとのインストールを実行します。
+   > **注**:次に、Classic Microsoft Teams のインストールと構成の手順を詳しく説明します (このラボで使用されているイメージに Teams が既に存在しているため、学習が目的)。
 
-   ```powershell
-   Start-Process -FilePath 'C:\Allfiles\Labs\02\x64\Release\FSLogixAppsSetup.exe' -ArgumentList '/quiet' -Wait
-   ```
-
-   > **注**: インストールが完了するまで待ちます。 これには 1 分ほどかかる場合があります。 インストールによって再起動がトリガーされた場合は、**az140-25-vm0** に再接続します。
-
-   > **注**: 次に、Microsoft Teams のインストールと構成を段階的に行います (学習目的で、Teams はこのラボで使用されるイメージに既に存在するため)。
-
+1. **az140-25-vm0** への Bastion セッション内で、**[コントロール パネル] > [プログラム] > [プログラムと機能]** に移動し、**[コンピューター全体の Teams インストーラ]** プログラムを右クリックして、**[アンインストール]** を選択します。
 1. **az140-25-vm0** への Bastion セッション内で、**[スタート]** を右クリックし、右クリック メニューの **[実行]** を選択し、**[実行]** ダイアログ ボックスの **[開く]** テキストボックスに **「cmd」** と入力し、**Enter** キーを押して**コマンド プロンプト**を起動します。
 1. **[Administrator: C:\windows\system32\cmd.exe]** ウィンドウで、コマンド プロンプトから次を実行して、Microsoft Teams のマシンごとのインストールの準備をします。
 
@@ -156,7 +146,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    C:\Allfiles\Labs\02\vc_redist.x64.exe /install /passive /norestart /log C:\Allfiles\Labs\02\vc_redist.log
    ```
 
-1. **az140-25-vm0** への Bastion セッション内の Microsoft Edge で[「Teams デスクトップ アプリを VM に展開する」](https://docs.microsoft.com/en-us/microsoftteams/teams-for-vdi#deploy-the-teams-desktop-app-to-the-vm)というタイトルのドキュメント ページを参照し、**64 ビット バージョン**のリンクをクリックして、プロンプトが表示されたら、**Teams_windows_x64.msi** ファイルを **C:\\Allfiles\\Labs\\02** フォルダーに保存します。
+1. **az140-25-vm0** への Bastion セッション内の Microsoft Edge で[「Teams デスクトップ アプリを VM に展開する」](https://learn.microsoft.com/en-us/microsoftteams/teams-for-vdi#deploy-the-teams-desktop-app-to-the-vm)というタイトルのドキュメント ページを参照し、**64 ビット バージョン**のリンクをクリックして、プロンプトが表示されたら、**Teams_windows_x64.msi** ファイルを **C:\\Allfiles\\Labs\\02** フォルダーに保存します。
 1. **az140-25-vm0** への Bastion のセッション内で、**[Administrator: C:\windows\system32\cmd.exe]** ウィンドウに切り替え、コマンド プロンプトから次を実行して、Microsoft Teams のマシンごとのインストールを実行します。
 
    ```cmd
@@ -164,9 +154,8 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    ```
 
    > **注**: インストーラは ALLUSER=1 と ALLUSERS=1 パラメーターをサポートしています。 ALLUSER=1 パラメーターは、VDI 環境でのマシンごとのインストールを想定しています。 ALLUSERS=1 パラメーターは、VDI 以外の環境と VDI 環境で使用できます。 
-   > **注**: **製品の別のバージョンが既にインストールされている**ことを示すエラーが発生した場合は、次の手順を実行します。**[コントロール パネル > プログラム > プログラムと機能]** から **[Teams コンピューター全体のインストーラー]** プログラムを右クリックし、**[アンインストール]** を選択します。 プログラムの削除を進めてから、上のステップ 13 を再実行します。 
 
-1. **az140-25-vm0** への Bastion セッション内で、**[Windows PowerShell ISE]** を管理者として起動し、**[Administrator: Windows PowerShell ISE]** コンソールから次を実行して Microsoft Edge Chromium をインストールします (学習目的で、Edge はこのラボで使用されているイメージに既に存在するため)。
+1. **az140-25-vm0** への Bastion セッション内で **Windows PowerShell ISE** を管理者として起動し、**[管理者:Windows PowerShell ISE]** コンソールから次を実行して、Microsoft Edge をインストールします (このラボで使用されているイメージに Teams が既に存在しているため、学習が目的)。
 
    ```powershell
    Start-BitsTransfer -Source "https://aka.ms/edge-msi" -Destination 'C:\Allfiles\Labs\02\MicrosoftEdgeEnterpriseX64.msi'
@@ -177,7 +166,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 
    > **注**: 複数言語環境で動作する場合は、言語パックのインストールが必要になる場合があります。 この手順の詳細については、Microsoft Docs の記事「[Windows 10 マルチセッションイメージへの言語パックの追加](https://docs.microsoft.com/en-us/azure/virtual-desktop/language-packs)」を参照してください。
 
-   > **注**: 次に、Windows 自動更新を無効にし、ストレージ センサーを無効にし、タイム ゾーン リダイレクトを構成し、テレメトリの収集を構成します。 一般に、すべての現在の更新プログラムを最初に適用する必要があります。 このラボでは、ラボの期間を最小限に抑えるために、この手順をスキップします。
+   > **注**: 次に、Windows 自動更新を無効にし、ストレージ センサーを無効にし、タイム ゾーン リダイレクトを構成し、テレメトリの収集を構成します。 一般的に、最新の品質更新プログラムを最初に適用する必要があります。 このラボでは、ラボの期間を最小限に抑えるために、この手順をスキップします。
 
 1. **az140-25-vm0** への Bastion セッション内で、**[Administrator: C:\windows\system32\cmd.exe]** ウィンドウに切り替えて、コマンド プロンプトから次を実行して自動更新を無効にします。
 
@@ -188,7 +177,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 1. **[Administrator: C:\windows\system32\cmd.exe]** ウィンドウで、コマンド プロンプトから次を実行して、ストレージ センサーを無効にします。
 
    ```cmd
-   reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v 01 /t REG_DWORD /d 0 /f
+   reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy" /v 01 /t REG_DWORD /d 0 /f
    ```
 
 1. **[Administrator: C:\windows\system32\cmd.exe]** ウィンドウで、コマンド プロンプトから次を実行して、タイム ゾーン リダイレクトを構成します。
@@ -215,6 +204,8 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    cleanmgr /d C: /verylowdisk
    ```
 
+   > **注**:ディスクのクリーンアップ プロセスには 3 から 5 分かかる場合があります。
+
 #### タスク 4: Azure Virtual Desktop ホスト イメージを作成する
 
 1. **az140-25-vm0** への Bastion セッション内の、**[Administrator: C:\windows\system32\cmd.exe]** ウィンドウで、コマンド プロンプトから、sysprep ユーティリティを実行して、オペレーティング・システムをイメージ生成用に準備し、自動的にシャットダウンします。
@@ -225,6 +216,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 
    > **注**: sysprep プロセスが完了するまでお待ちください。 これには 2 分ほどかかる場合があります。 これにより、オペレーティング システムが自動的にシャットダウンされます。 
 
+1. ラボ コンピューターの **[接続エラー]** ダイアログで、**[閉じる]** を選択します。
 1. ラボ コンピューターの Azure portal を表示する Web ブラウザーで、**[仮想マシン]** を見つけて選択し、**[仮想マシン]** ブレードから **az140-25-vm0** を選択します。
 1. **[az140-25-vm0]** ブレードの **[要点]** セクションの上にあるツール バーで、**[更新]** をクリックし、Azure VM の**状態**が **[停止済み]** に変わったことを確認し、**[停止]** をクリックします。確認を求められたら、**[OK]** をクリックして Azure VM を**停止 (割り当て解除)** 状態に移行します。
 1. **[az140-25-vm0]** ブレードで、Azure VM の**状態**が**停止 (割り当て解除)** 状態に変わったことを確認し、ツール バーの **[キャプチャ]** をクリックします。 **[イメージの作成]** ブレードが自動的に表示されます。
@@ -234,7 +226,7 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    |---|---|
    |Azure コンピューティング ギャラリーにイメージを共有する|**はい、イメージ バージョンとしてギャラリーに共有します**|
    |イメージの作成後、この仮想マシンを自動的に削除します|チェックボックスをオフにする|
-   |ターゲット Azure コンピュート ギャラリー|新しいギャラリーの名前 **az14025imagegallery**|
+   |ターゲット Azure コンピュート ギャラリー|「**az14025imagegallery**」という名前の新しいギャラリーを作成します|
    |オペレーティング システムの状態|**一般化されたイメージ**|
 
 1. **[イメージの作成]** ブレードの **[基本]** タブで、**[ターゲット VM イメージ定義]** テキストボックスの下にある **[新規作成]** をクリックします。
@@ -256,11 +248,11 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    |有効期限の終了日|現在の日付から 1 年後|
    |既定のレプリカ数|**1**|
    |ターゲット リージョンのレプリカ数|**1**|
-   |ストレージ アカウントの種類|**Premium SSD LRS**|
+   |既定のストレージ SKU|**Premium SSD LRS**|
 
 1. **[イメージの作成]** ブレードの **[確認と作成]** タブで、**[作成]** をクリックします。
 
-   > **注**: デプロイが完了するまで待ちます。 これには 20 分ほどかかる場合があります。
+   > **注**: デプロイが完了するまで待ちます。 これには約 10 から 15 分かかる場合があります。
 
 1. ラボ コンピューターから、Azure portal を表示している Web ブラウザーで、**[Azure Compute Gallery]** を見つけて選択し、**[Azure Compute Gallery]** ウィンドウで **az14025imagegallery** エントリを選択し、****az14025imagegallery**** ウィンドウで新しく作成されたイメージを表す **az140-25-host-image** エントリの存在を確認します。
 
@@ -284,9 +276,10 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    |ホスト プール名|**az140-25-hp4**|
    |場所|このラボの最初の演習でリソースをデプロイした Azure リージョンの名前|
    |検証環境|**いいえ**|
+   |優先するアプリ グループの種類|**デスクトップ**|
    |ホスト プールの種類|**プールされた**|
-   |最大セッションの制限|**50**|
    |負荷分散アルゴリズム|**幅優先**|
+   |最大セッションの制限|**12**|
 
 1. **[ホスト プールの作成]** ブレードの **[仮想マシン]** タブで、次の設定を指定します。
 
@@ -309,19 +302,21 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
    |[仮想マシンのサイズ]|**Standard D2s v3**|
    |[Number of VMs](VM の数)|**1**|
    |OS ディスクの種類|**Standard SSD**|
+   |ブート診断|**マネージド ストレージ アカウントで有効にする (推奨)**|
    |仮想ネットワーク|**az140-adds-vnet11**|
    |Subnet|**hp4-Subnet (10.0.4.0/24)**|
    |ネットワーク セキュリティ グループ|**Basic**|
-   |パブリック インバウンド ポート|**はい**|
-   |許可する受信ポート|**RDP**|
+   |パブリック インバウンド ポート|**いいえ**|
+   |参加したいディレクトリを選択する|**Active Directory**|
    |AD ドメイン参加 UPN|**student@adatum.com**|
    |パスワード|**Pa55w.rd1234**|
+   |[パスワードの確認入力]|**Pa55w.rd1234**|
    |特定のドメインまたはユニット|**はい**|
    |参加するドメイン|**adatum.com**|
    |組織単位のパス|**OU=WVDInfra,DC=adatum,DC=com**|
-   |ユーザー名|Student|
-   |パスワード|Pa55w.rd1234|
-   |[パスワードの確認入力]|Pa55w.rd1234|
+   |ユーザー名|**Student**|
+   |パスワード|**Pa55w.rd1234**|
+   |[パスワードの確認入力]|**Pa55w.rd1234**|
 
 1. **[ホスト プールの作成]** ブレードの **[ワークスペース]** タブで、次の設定を指定し、**[確認および作成]** を選択します。
 
@@ -332,11 +327,10 @@ Microsoft Entra DS 環境で Azure Virtual Desktop ホスト イメージを作�
 1. **[ホストプールの作成]** ブレードの **[確認および作成]** タブで、**[作成]** を選択します。
 
    > **注**: デプロイが完了するまで待ちます。 これには 10 分ほどかかる場合があります。
-   > 
-   > **注** クォータ制限に達したためにデプロイが失敗する場合は、最初のラボで説明した手順を実行して、Standard D2sv3 の制限を 30 に増やす要求を自動的に行います。
+
+   > **注**:クォータ制限に達したためにデプロイが失敗した場合は、最初のラボで説明している手順を実行して、Standard D2sv3 のクォータ制限を 30 に引き上げることを自動的に要求します。
 
    > **注**: カスタム イメージに基づくホストのデプロイ後は、[GitHub リポジトリ](https://github.com/The-Virtual-Desktop-Team/)から入手できる Virtual Desktop 最適化ツールの実行を検討する必要があります。
-
 
 ### 演習 2: ラボでプロビジョニングされた Azure VM を停止して割り当てを解除する
 

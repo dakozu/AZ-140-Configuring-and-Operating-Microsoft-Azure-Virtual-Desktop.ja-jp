@@ -41,15 +41,15 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
 
 1. PowerShell を使用して Azure Virtual Desktop ホスト プールのデプロイを準備する
 1. PowerShell を使用して Azure Virtual Desktop のホスト プールを作成する
-1. PowerShell を使用して Windows 10 Enterprise を実行している Azure VM のテンプレートベースのデプロイを実行する
-1. PowerShell を使用して Windows 10 Enterprise を実行している Azure VM をセッション ホストとして Azure Virtual Desktop ホスト プールに追加する
+1. PowerShell を使用して Windows 11 Enterprise を実行する Azure VM のテンプレートベースのデプロイを実行する
+1. PowerShell を使用して Azure Virtual Desktop ホスト プールにセッション ホストとして Windows 11 Enterprise を実行する Azure VM を追加する
 1. Azure Virtual Desktop セッション ホストのデプロイを確認する
 
 #### タスク 1: PowerShell を使用して Azure Virtual Desktop ホスト プールのデプロイを準備する
 
 1. ラボのコンピューターから Web ブラウザーを起動し、[Azure portal](https://portal.azure.com) に移動して、このラボで使用するサブスクリプションの所有者ロールを持つユーザー アカウントの資格情報を指定してサインインします。
 1. Azure portal で、「**仮想マシン**」を検索して選択し、**[仮想マシン]** ウィンドウで **[az140-dc-vm11]** を選択します。
-1. **[az140-dc-vm11]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[Bastion]** を選択し、**[az140-dc-vm11 \| 接続]** ウィンドウの **[Bastion]** タブで **[Bastion を使用する]** を選択します。
+1. **[az140-dc-vm11]** ブレードで **[接続]** を選択し、ドロップダウン メニューで **[Bastion 経由で接続する]** を選択します。
 1. プロンプトが表示されたら、次の資格情報を入力し、**[接続]** を選択します。
 
    |設定|値|
@@ -57,19 +57,7 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    |[ユーザー名]|**Student**|
    |パスワード|**Pa55w.rd1234**|
 
-1. **az140-dc-vm11** への Bastion セッション内で、**Windows PowerShell ISE** を管理者として起動します。
-1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** コンソールから次を実行して、Azure Virtual Desktop プール セッション ホストのコンピューター オブジェクトをホストする **「WVDInfra」** という名前の組織単位の識別名を特定します。
-
-   ```powershell
-   (Get-ADOrganizationalUnit -Filter "Name -eq 'WVDInfra'").distinguishedName
-   ```
-
-1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** スクリプト ペインから次を実行して、Azure Virtual Desktop ホストを AD DS ドメイン (**student@adatum.com**) に参加させるために使用する **ADATUM\\Student** アカウントの UPN サフィックスを特定します。
-
-   ```powershell
-   (Get-ADUser -Filter {sAMAccountName -eq 'student'} -Properties userPrincipalName).userPrincipalName
-   ```
-
+1. **az140-dc-vm11** への Bastion セッション内で、管理者として **Windows PowerShell ISE** を起動します。
 1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** スクリプト ペインから次を実行して、DesktopVirtualization PowerShell モジュールをインストールします (プロンプトが表示されたら、**[Yes to All]** を選択します)。
 
    ```powershell
@@ -87,21 +75,8 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    |名前|**hp3-Subnet**|
    |サブネットのアドレス範囲|**10.0.3.0/24**|
 
-1. **az140-dc-vm11** への Bastion セッション内で、「Azure portal」ページの上部にある **[リソース、サービス、ドキュメントの検索]** テキスト ボックスを使用して、**「ネットワーク セキュリティ グループ」** を検索して移動し、**[ネットワーク セキュリティ グループ]** ブレードで、**[az140-11-RG]** リソース グループ内のセキュリティ グループを選択します。
-1. ネットワーク セキュリティ グループ ウィンドウの左側の垂直メニューの **[設定]** セクションで、**[プロパティ]** をクリックします。
-1. **[プロパティ]** ウィンドウで、**[リソース ID]** テキスト ボックスの右側にある **[クリップボードにコピー]** アイコンをクリックします。 
-
-   > **注**: 値は、`/subscriptions/de8279a3-0675-40e6-91e2-5c3728792cb5/resourceGroups/az140-11-RG/providers/Microsoft.Network/networkSecurityGroups/az140-cl-vm11-nsg` のような形式になります。ただし、サブスクリプション ID は異なります。 これは、次のタスクで必要になるので記録しておきます。
-
 #### タスク2: PowerShell を使用して Azure Virtual Desktop のホスト プールを作成する
 
-1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** スクリプト ペインから次を実行して、Azure サブスクリプションにサインインします。
-
-   ```powershell
-   Connect-AzAccount
-   ```
-
-1. ダイアログが表示されたら、このラボで使用するサブスクリプションの所有者ロールをもつユーザー アカウントの資格情報を入力します。
 1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** スクリプト ペインから次を実行して、Azure 仮想ネットワーク **az140-adds-vnet11** をホストしている Azure リージョンを特定します。
 
    ```powershell
@@ -139,7 +114,7 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    New-AzRoleAssignment -ObjectId $aadGroupObjectId -RoleDefinitionName $roleDefinitionName -ResourceName $dagAppGroupName -ResourceGroupName $resourceGroupName -ResourceType 'Microsoft.DesktopVirtualization/applicationGroups'
    ```
 
-#### タスク 3: PowerShell を使用して Windows 10 Enterprise を実行する Azure VM のテンプレートベースのデプロイを実行する
+#### タスク 3:PowerShell を使用して Windows 11 Enterprise を実行する Azure VM のテンプレートベースのデプロイを実行する
 
 1. 自分のラボ コンピューターから、デプロイされたストレージ アカウントに移動します。 [ファイル共有] ウィンドウで、ファイル共有 **[az140-22-profiles]** を選択します。
 
@@ -147,7 +122,7 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
 
 1. **az140-dc-vm11** への Bastion セッション内で、エクスプローラーを開き、前に構成した Z:、またはファイル共有への接続に割り当てたドライブ文字に移動します。 アップロードしたデプロイ ファイルを **C:\AllFiles\Labs\02** にコピーします。
 
-1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** コンソールから以下を実行して、前のタスクで作成したホスト プールで Azure Virtual Desktop セッション ホストとして機能する Windows 10 Enterprise (マルチセッション) を実行している Azure VM をデプロイします。
+1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** コンソールから次を実行して、前のタスクで作成したホスト プールに Azure Virtual Desktop セッション ホストとして機能する Windows 11 Enterprise (マルチセッション) を実行する Azure VM をデプロイします。
 
    ```powershell
    $resourceGroupName = 'az140-24-RG'
@@ -160,7 +135,7 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
      -TemplateParameterFile C:\AllFiles\Labs\02\az140-24_azuredeployhp3.parameters.json
    ```
 
-   > **注**: デプロイが完了するまで待ってから、次のタスクに進んでください。 これには 5 分ほどかかる場合があります。 
+   > **注**: デプロイが完了するまで待ってから、次のタスクに進んでください。 これには約 5 から 10 分かかる場合があります。 
 
    > **注**: デプロイでは、Azure Resource Manager テンプレートを使用して Azure VM をプロビジョニングし、オペレーティング システムを **adatum.com** AD DS ドメインに自動的に参加させる VM 拡張機能を適用します。
 
@@ -170,10 +145,13 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    Get-ADComputer -Filter "sAMAccountName -eq 'az140-24-p3-0$'"
    ```
 
-#### タスク 4: PowerShell を使用して Windows 10 Enterprise を実行する Azure VM をホストとして Azure Virtual Desktop ホスト プールに追加する
+#### タスク 4:PowerShell を使用して Azure Virtual Desktop ホスト プールにホストとして Windows 11 Enterprise を実行する Azure VM を追加する
 
 1. **az140-dc-vm11** への Bastion セッション内の Azure portal が表示されているブラウザー ウィンドウで、**「仮想マシン」** を検索して選択し、**[仮想マシン]** ブレードの仮想マシンの一覧で **[az140-24-p3-0]** を選択します。
-1. **[az140-24-p3-0]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[RDP]** を選択し、**[az140-24-p3-0 \| 接続]** ウィンドウの **[RDP]** タブで **[IP アドレス]** ドロップダウン リストから **[プライベート IP アドレス (10.0.3.4)]** エントリを選択し、**[RDP ファイルのダウンロード]** を選択します。
+1. **[az140-24-p3-0]** ブレードで **[接続]** を選択し、ドロップダウン メニューで **[接続]** を選択します
+1. **[接続方法]** に **"プライベート IP アドレス | 10.0.3.4"** と表示されていることを確認します
+1. **[ネイティブ RDP]** セクションから、**[RDP ファイルのダウンロード]** を選択します。
+1. メッセージが表示されたら、**[保持]** を選択して、ダウンロードした **az140-24-p3-0.rdp** ファイルをクリックします。
 1. プロンプトが表示されたら、次の認証情報を入力します。
 
    |設定|値|
@@ -203,29 +181,22 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    $webClient.DownloadFile($wvdBootLoaderInstallerURL,"$labFilesFolder/$wvdBootLoaderInstallerName")
    ```
 
-1. **az140-24-p3-0** へのリモート デスクトップ セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインから以下を実行して、PowerShellGet モジュールの最新バージョンをインストールします (確認を求められたら **[はい]** を選択します)。
+1. **[管理者: Windows PowerShell ISE]** コンソールから次を実行して、Az PowerShell モジュールの最新バージョンをインストールします。NuGet プロバイダーのインストールを求められたら、**Y** キーを押します。
 
    ```powershell
-   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-   Install-Module -Name PowerShellGet -Force -SkipPublisherCheck
+   Install-Module -Name Az -Force
    ```
 
-1. **[管理者: Windows PowerShell ISE]** コンソールから以下を実行して、最新バージョンの Az.DesktopVirtualization PowerShell モジュールをインストールします。
+   > **注**:Az モジュールのインストールからの出力が表示されるまで、3 から 5 分待つ必要がある場合があります。 また、出力が停止した**後**、さらに 5 分待つ必要がある場合があります。 これは正しい動作です。
+
+1. **[管理者: Windows PowerShell ISE]** コンソールから、以下を実行して、Azure サブスクリプションにサインインします。
 
    ```powershell
-   Install-Module -Name Az.DesktopVirtualization -AllowClobber -Force
-   Install-Module -Name Az -AllowClobber -Force
-   ```
-
-1. **[管理者: Windows PowerShell ISE]** コンソールから以下を実行して、PowerShell 実行ポリシーを変更し、Azure サブスクリプションにサインインします。
-
-   ```powershell
-   Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope CurrentUser -Force
    Connect-AzAccount
    ```
 
 1. ダイアログが表示されたら、このラボで使用するサブスクリプションの所有者ロールをもつユーザー アカウントの資格情報を入力します。
-1. **az140-24-p3-0** へのリモート Desktopliveid セッション内で、**[管理者: Windows PowerShell ISE]** コンソールから以下を実行して、この演習の前半でプロビジョニングしたプールに新しいセッション ホストを参加させるために必要なトークンを生成します。
+1. **az140-24-p3-0** へのリモート デスクトップ セッション内で、**[管理者: Windows PowerShell ISE]** コンソールから次を実行して、この演習で前にプロビジョニングしたプールにこのセッション ホストを参加させるために必要なトークンを生成します。
 
    ```powershell
    $resourceGroupName = 'az140-24-RG'
@@ -246,6 +217,8 @@ Active Directory Domain Services (AD DS) 環境で PowerShell を使用して、
    ```powershell
    Start-Process -FilePath "msiexec.exe" -ArgumentList "/i $wvdBootLoaderInstallerName", "/quiet", "/qn", "/norestart", "/passive", "/l* $labFilesFolder\BootLoaderInstall.log" | Wait-process
    ```
+
+1. **az140-24-p3-0** へのリモート デスクトップ セッション内で **[スタート]** を右クリックし、右クリック メニューで **[シャットダウンまたはサインアウト]** を選択して、カスケード メニューで **[サインアウト]** をクリックします。
 
 #### タスク 5: Azure Virtual Desktop ホストのデプロイを確認する
 

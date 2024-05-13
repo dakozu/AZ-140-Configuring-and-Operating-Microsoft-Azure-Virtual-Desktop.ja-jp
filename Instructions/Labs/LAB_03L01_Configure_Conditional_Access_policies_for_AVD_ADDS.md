@@ -47,7 +47,7 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
 1. Microsoft Entra 多要素認証 (MFA) を構成する
 1. Microsoft Entra MFA のユーザーを登録する
 1. ハイブリッド Microsoft Entra 参加を構成する
-1. Microsoft Entra Connect の差分同期をトリガーする
+1. Microsoft Azure Active Directory Connect の差分同期をトリガーする
 
 #### タスク 1: Microsoft Entra Premium P2 ライセンスを構成する
 
@@ -101,7 +101,7 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
 > **注**: この機能を利用して、Microsoft Entra 参加状態に基づいてデバイスの条件付きアクセスを設定するときに、追加のセキュリティを実装できます。
 
 1. ラボ コンピューターの Azure portal が表示されている Web ブラウザーで、「**仮想マシン**」を検索して選択し、**[仮想マシン]** ブレードから **az140-dc-vm11** を選択します。
-1. **[az140-dc-vm11]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[Bastion]** を選択し、**[az140-dc-vm11 \| 接続]** ウィンドウの **[Bastion]** タブで **[Bastion を使用する]** を選択します。
+1. **[az140-dc-vm11]** ブレードで **[接続]** を選択し、ドロップダウン メニューで **[Bastion 経由で接続する]** を選択します。
 1. プロンプトが表示されたら、次の資格情報を入力し、**[接続]** を選択します。
 
    |設定|値|
@@ -109,18 +109,17 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
    |[ユーザー名]|**Student**|
    |パスワード|**Pa55w.rd1234**|
 
-1. **az140-dc-vm11** への Bastion セッション内の **[スタート]** メニューで、**Microsoft Entra Connect** フォルダーを展開し、**Microsoft Entra Connect** を選択します。
-   > **注** "同期サービスが実行されていません" という失敗エラー ウィンドウが表示された場合は、PowerShell コマンド ウィンドウに移動して、「**Start-Service "ADSync"**」と入力し、手順 4 をもう一度試行します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「Microsoft Entra Connect へようこそ」** ページで、**[構成]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「追加のタスク」** ページで、**[デバイス オプションの構成]** を選択し、**[次へ]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「概要」** ページで、**ハイブリッド Microsoft Entra 参加**と**デバイス ライトバック**に関する情報を確認し、**[次へ]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「Connect to Microsoft Entra」** ページで、前の演習で作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証し、**[次へ]** を選択します。  
+1. **az140-dc-vm11** への Bastion セッション内の **[スタート]** メニューで、**Azure AD Connect** フォルダーを展開し、**[Azure AD Connect]** を選択します。
 
-   > **注**: このラボで先ほど記録した **aadsyncuser** アカウントの userPrincipalName 属性を指定し、このユーザー アカウントの作成時に設定したパスワードを指定します。 
+   > **注** "同期サービスが実行されていません" という失敗エラー ウィンドウが表示された場合は、PowerShell コマンド ウィンドウに移動して、「**Start-Service "ADSync"**」と入力し、前の手順をもう一度実行してみます。
 
-1. **[Microsoft Entra Connect]** ウィンドウの **「デバイス オプション」** ページで、**[ハイブリッド Microsoft Entra 参加の構成]** オプションが選択されていることを確認し、**[次へ]** を選択します。 
-1. **[Microsoft Entra Connect]** ウィンドウの **「デバイス オペレーティング システム」** ページで、**[Windows 10 以降のドメイン参加済みデバイス]** チェックボックスを選択し、**[次へ]** を選択します。 
-1. **[Microsoft Entra Connect]** ウィンドウの **「SCP 構成」** ページで、**adatum.com** エントリの横にあるチェックボックスを選択し、**[認証サービス]** ドロップダウン リストで **[Microsoft Entra]** エントリを選択し、**[追加]** を選択します。 
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[Azure AD Connect へようこそ]** ページで、**[構成]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[追加のタスク]** ページで、**[デバイス オプションの構成]** を選択し、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[概要]** ページで、**ハイブリッド Microsoft Entra 参加**と**デバイス ライトバック**に関する情報を確認して、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[Microsoft Entra に接続]** ページで、前のラボで作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証して、**[次へ]** を選択します。  
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[デバイス オプション]** ページで、**[ハイブリッド Azure AD 参加を構成する]** オプションが選択されていることを確認して、**[次へ]** を選択します。 
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[デバイス オペレーティング システム]** ページで、**[Windows 10 以降のドメインに参加しているデバイス]** チェックボックスを選択して、**[次へ]** を選択します。 
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[SCP 構成]** ページで **adatum.com** エントリの横にあるチェックボックスを選択し、**[認証サービス]** ドロップダウン リストで **Azure Active Directory** エントリを選択して、**[追加]** を選択します。 
 1. メッセージが表示されたら、**[エンタープライズ管理者の資格情報]** ダイアログ ボックスで、次の資格情報を指定し、**[OK]** を選択します。
 
    |設定|値|
@@ -128,8 +127,8 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
    |ユーザー名|**ADATUM\Student**|
    |パスワード|**Pa55w.rd1234**|
 
-1. **[Microsoft Entra Connect]** ウィンドウの **「SCP 構成」** ページに戻り、**[次へ]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「構成の準備完了」** ページで、**[構成]** を選択し、構成が完了したら **[終了]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[SCP 構成]** ページに戻り、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[構成の準備完了]** ページで、**[構成]** を選択します。構成が完了したら、**[終了]** を選択します。
 1. **az140-dc-vm11** への Bastion セッション内で、**Windows PowerShell ISE** を管理者としてを起動します。
 1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** コンソールから、次を実行して、**az140-cl-vm11** コンピューター アカウントを **WVDClients** 組織単位 (OU) に移動します。
 
@@ -138,22 +137,21 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
    ```
 
 1. **az140-dc-vm11** への Bastion セッション内の **[スタート]** メニューで、**Microsoft Entra Connect** フォルダーを展開し、**Microsoft Entra Connect** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「Microsoft Entra Connect へようこそ」** ページで、**[構成]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「追加のタスク」** ページで、**[同期オプションをカスタマイズする]** を選択し、**[次へ]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「Connect to Microsoft Entra」** ページで、前の演習で作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証し、**[次へ]** を選択します。 
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[Azure AD Connect へようこそ]** ページで、**[構成]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[追加のタスク]** ページで、**[同期オプションをカスタマイズする]** を選択して、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[Microsoft Entra に接続]** ページで、前の演習で作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証し、**[次へ]** を選択します。 
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[ディレクトリの接続]** ページで、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[ドメインと OU のフィルタリング]** ページで、**[選択したドメインと OU を同期する]** オプションが選択されていることを確認し、**adatum.com** ノードを展開し、**ToSync OU** の横にあるチェックボックスが選択されていることを確認し、**WVDClients OU** の横にあるチェックボックスを選択して、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[オプション機能]** ページで、規定の設定を受け入れて、**[次へ]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[構成の準備完了]** ページで、**[構成が完了したら、同期プロセスを開始する]** チェックボックスが選択されていることを確認して、**[構成]** を選択します。
+1. **[構成が完了しました]** ページの情報を確認し、**[終了]** を選択して、**[Microsoft Azure Active Directory Connect]** ウィンドウを閉じます。
 
-   > **注**: このラボで先ほど記録した **aadsyncuser** アカウントの userPrincipalName 属性を指定し、このユーザー アカウントの作成時に設定したパスワードを指定します。 
+#### タスク 5:Microsoft Azure Active Directory Connect の完全同期をトリガーする
 
-1. **[Microsoft Entra Connect]** ウィンドウの **「ディレクトリの接続」** ページで、**[次へ** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「ドメインと OU のフィルタリング」** ページで、**[選択したドメインと OU を同期する]** オプションが選択されていることを確認し、**adatum.com** ノードを展開して、**ToSync OU** の横にあるチェックボックスが選択されていることを確認し、**WVDClients** OU の横にあるチェックボックスを選択して、**[次へ]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「オプション機能」** ページで、既定の設定をそのまま使用して、**[次へ]** を選択します。
-1. **[Microsoft Entra Connect]** ウィンドウの **「構成の準備完了」** ページで、**[構成が完了したら、同期プロセスを開始してください]** チェックボックスが選択されていることを確認し、**[構成]** を選択します。
-1. **「構成が完了しました」** ページの情報を確認し、**[終了]** を選択して、**[Mcrosoft Entra Connect]** ウィンドウを閉じます。
-
-#### タスク 5: Microsoft Entra Connect の差分同期をトリガーする
-
+1. ラボ コンピューターから、Azure portal で、**[仮想マシン]** を検索して選択し、**[仮想マシン]** ブレードで **az140-cl-vm11** エントリを選択します。 この操作を行うと、**[az140-cl-vm11]** ブレードが開きます。
+1. **[az140-cl-vm11]** ブレード内で **[再起動]** を選択したら、**[仮想マシンが正常に再起動しました]** の通知が表示されるまで待ちます。
 1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** ウィンドウに切り替えます。
-1. **az140-dc-vm11** への Bastion セッション内で、**[Administrator: Windows PowerShell ISE]** コンソールから次を実行して、Microsoft Entra Connect の差分同期をトリガーします。
+1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** コンソール ペインで、次のコマンドを実行して、Microsoft Azure Active Directory Connect の完全同期をトリガーします。
 
    ```powershell
    Import-Module -Name "C:\Program Files\Microsoft Azure AD Sync\Bin\ADSync"
@@ -161,9 +159,9 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
    ```
 
 1. **az140-dc-vm11** への Bastion セッション内で、Microsoft Edge を起動して、[Azure portal](https://portal.azure.com) に移動します。 メッセージが表示されたら、このラボで使用している Azure サブスクリプションに関連付けられている Microsoft Entra テナントのグローバル管理者ロールを持つユーザー アカウントの Microsoft Entra 資格情報を使用してサインインします。
-1. **az140-dc-vm11** への Bastion セッション内において、Azure portal が表示されている [Microsoft Edge] ウィンドウで、**「Azure Active Directory」** を検索して選択し、このラボに使用している Azure サブスクリプションに関連付けられている Microsoft Entra テナントに移動します。
-1. [Azure Active Directory] ブレードの左側にある垂直方向のメニュー バーの **[管理]** セクションで、**[デバイス]** をクリックします。 
-1. **[デバイス | すべてのデバイス]** ブレードで、デバイスの一覧を確認し、**az140-cl-vm11** デバイスが **[参加の種類]** 列の **[ハイブリッド Microsoft Entra 参加済み]** エントリに一覧表示されていることを確認します。
+1. **az140-dc-vm11** への Bastion セッション内の、Azure portal が表示されている Microsoft Edge ウィンドウで、**Microsoft Entra ID** を検索して選択し、このラボで使用している Azure サブスクリプションに関連付けられている Microsoft Entra テナントに移動します。
+1. Microsoft Entra ID ブレードの左側にある縦型メニュー バーの **[管理]** セクションで、**[デバイス]** をクリックします。 
+1. **[デバイス | すべてのデバイス]** ブレードで、デバイスの一覧を確認し、**az140-cl-vm11** デバイスが **"Join の種類"** 列に **"ハイブリッド Microsoft Entra 参加済み"** エントリと共に一覧表示されていることを確認します。
 
    > **注**: デバイスが Azure portal に表示されるには、同期が有効になるまで数分待つ必要がある場合があります。
 

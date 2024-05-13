@@ -25,7 +25,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 このラボを完了すると、次のことができるようになります。
 
 - Azure VM を使用して Active Directory Domain Services (AD DS) 単一ドメイン フォレストをデプロイする
-- AD DS フォレストを単一の Microsoft Entra テナントに統合する
+- AD DS フォレストを Microsoft Entra テナントに統合する
 
 ## ラボ ファイル
 
@@ -110,9 +110,10 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 #### タスク 1: Azure VM のデプロイを準備する
 
 1. ラボのコンピューターから Web ブラウザーを起動し、[Azure portal](https://portal.azure.com) に移動して、このラボで使用するサブスクリプションの所有者ロールを持つユーザー アカウントの資格情報を指定してサインインします。
-1. Azure portal を表示している Web ブラウザーにおいて、Microsoft Entra テナントの **[概要]** ブレードに移動し、左側の垂直方向のメニューの **[管理]** セクションで、**[プロパティ]** をクリックします。
+1. Azure portal で、Azure ポータル ページの上部にある **[リソース、サービス、ドキュメントを検索する]** テキスト ボックスを使用し、**[Microsoft Entra ID]** ブレードを検索してそこに移動します。
+1. Microsoft Entra テナントの **[概要]** ブレードの左側にある縦型メニューの **[管理]** セクションで、**[プロパティ]** をクリックします。
 1. Microsoft Entra テナントの **[プロパティ]** ブレードの一番下で、**[セキュリティの既定値群の管理]** リンクを選択します。
-1. **[セキュリティ既定値の有効化]** ウィンドウで、必要に応じて、**[いいえ]** を選択し、**[自分の組織では条件付きアクセスを使用している]** チェックボックスを選択して、**[保存]** を選択します。
+1. **[セキュリティの既定値の有効化]** ブレードで、必要に応じて、**[無効 (推奨されません)]** を選択し、**[組織で条件付きアクセスの使用を計画している]** オプション ボタンを選択して、**[保存]** を選択したら、**[無効]** を選択します。
 1. Azure portal で、検索テキスト ボックスのすぐ右にあるツール バー アイコンを選択して **[Cloud Shell]** ペインを開きます。
 1. **Bash** または **PowerShell** の選択を求めるメッセージが表示されたら、 **[PowerShell]** を選択します。 
 
@@ -131,7 +132,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 
 1. Azure portal で、**[Cloud Shell]**] ペインを閉じます。
 1. ラボ コンピューターから、同じ Web ブラウザー ウィンドウで、別の Web ブラウザー タブを開き、「[新しい Windows VM を作成し、新しい AD フォレスト、ドメイン、DC を作成する](https://github.com/az140mp/azure-quickstart-templates/tree/master/application-workloads/active-directory/active-directory-new-domain)」という名前のクイック スタート テンプレートのカスタマイズされたバージョンに移動します。 
-1. 「**新しい Windows VM を作成し、新しい AD フォレスト、ドメイン、DC を作成する**」ページで、**[Azure に配置する]** を選択します。 これにより、ブラウザーが Azure portal の **[新しい AD フォレストで Azure VM を作成する]** ブレードに自動的にリダイレクトされます。
+1. **[新しい Windows VM を作成し、新しい AD フォレスト、ドメイン、DC を作成する]** ページで、ページを下方向にスクロールして、**[Azure にデプロイ]** を選択します。 これにより、ブラウザーが Azure portal の **[新しい AD フォレストで Azure VM を作成する]** ブレードに自動的にリダイレクトされます。
 1. **[新しい AD フォレストを使用して Azure VM を作成する]** ブレードで、**[パラメーターの編集]** を選択します。
 1. **[パラメーターの編集]** ブレードで、**[ファイルの読み込み]** を選択し、**[開く]** ダイアログ ボックスで、**\\\\AZ-140\\AllFiles\\Labs\\01\\az140-11_azuredeploydc11.parameters.json** を選択して、**[開く]** を選択してから、**[保存]** を選択します。 
 1. **[新しい AD フォレストで Azure VM を作成する]** ブレードで、次の設定を指定します (他の設定は既存の値のままにします)。
@@ -144,7 +145,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 
 1. **[新しい AD フォレストを使用して Azure VM を作成する]** ブレードで、**[確認と作成]** を選択し、**[作成]** を選択します。
 
-   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 これには 15 分ほどかかる場合があります。 
+   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには 20 から 25 分かかる場合があります。 
 
 #### タスク 1: Azure Resource Manager クイックスタート テンプレートを使用して Windows 10 を実行する Azure VM をデプロイする
 
@@ -213,7 +214,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 
 1. **[Bastion の作成]** ウィンドウの **[確認と作成]** タブで、**[作成]** を選択します。
 
-   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには約 5 分かかります。
+   > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには約 10 分かかります。
 
 ### 演習 2: 単一の AD DS フォレストを単一の Microsoft Entra テナントに統合する
   
@@ -223,12 +224,11 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 1. AD DS UPN サフィックスを構成する
 1. Microsoft Entra との同期を構成するために使用する Microsoft Entra ユーザーを作成する
 1. Microsoft Entra Connect をインストールする
-1. ハイブリッド Microsoft Entra 参加を構成する
 
 #### タスク 1: Microsoft Entra に同期される AD DS ユーザーとグループを作成する
 
 1. ラボ コンピューターの Azure portal が表示されている Web ブラウザーで、「**仮想マシン**」を検索して選択し、**[仮想マシン]** ブレードから **az140-dc-vm11** を選択します。
-1. **[az140-dc-vm11]** ウィンドウで **[接続]** を選択し、ドロップダウン メニューで **[Bastion]** を選択し、**[az140-dc-vm11 \| 接続]** ウィンドウの **[Bastion]** タブで **[Bastion を使用する]** を選択します。
+1. **[az140-dc-vm11]** ブレードで **[接続]** を選択し、ドロップダウン メニューで **[Bastion 経由で接続する]** を選択します。
 1. プロンプトが表示されたら、次の資格情報を入力し、**[接続]** を選択します。
 
    |設定|値|
@@ -236,7 +236,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    |[ユーザー名]|**Student**|
    |パスワード|**Pa55w.rd1234**|
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、管理者として **Windows PowerShell ISE** を起動します。
+1. **az140-dc-vm11** への Bastion セッション内で、管理者として **Windows PowerShell ISE** を起動します。
 1. **[管理者: Windows PowerShell ISE]** スクリプト ペインから、以下を実行して、管理者向け Internet Explorer のセキュリティ強化を無効にします。
 
    ```powershell
@@ -306,7 +306,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 
 #### タスク 2: AD DS UPN サフィックスを構成する
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインから、以下を実行して、最新バージョンの PowerShellGet モジュールをインストールします (確認を求められたら、**[はい]** を選択します)。
+1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、PowerShellGet モジュールの最新バージョンをインストールします (確認を求められたら **[はい]** を選択します)。
 
    ```powershell
    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -318,6 +318,8 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    ```powershell
    Install-Module -Name Az -AllowClobber -SkipPublisherCheck
    ```
+
+   > **注**:Az モジュールのインストールからの出力が表示されるまで、3 から 5 分待つ必要がある場合があります。 また、出力が停止した**後**、さらに 5 分待つ必要がある場合があります。 これは正しい動作です。
 
 1. **[管理者: Windows PowerShell ISE]** コンソールから、以下を実行して、Azure サブスクリプションにサインインします。
 
@@ -365,7 +367,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    $domainUsers | foreach {$newUpn = $_.UserPrincipalName.Replace('adatum.com',$aadDomainName); $_ | Set-ADUser -UserPrincipalName $newUpn}
    ```
 
-1. **[管理者: Windows PowerShell ISE]** コンソールから、以下を実行して、**adatum.com** UPN サフィックスを **Student** ドメイン ユーザーに割り当てます。
+1. **[管理者: Windows PowerShell ISE]** コンソールから次を実行して、**adatum.com** UPN サフィックスを **Student** ドメイン ユーザーにもう一度割り当てます。
 
    ```powershell
    $domainAdminUser = Get-ADUser -Filter {sAMAccountName -eq 'Student'} -Properties userPrincipalName
@@ -374,9 +376,9 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 
 #### タスク 3: ディレクトリ同期の構成に使用する Microsoft Entra ユーザーを作成する
 
-1. **az140-dc-vm11** への [リモート デスクトップ] セッション内で、[**Administrator: Windows PowerShell ISE**] スクリプト ペインから、次を実行して、新しい Microsoft Entra ユーザーを作成します (`<password>` プレースホルダーは、ランダムで複雑なパスワードに置き換えます)。
+1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインから次を実行して、新しい Microsoft Entra ユーザーを作成します (`<password>` プレースホルダーをランダムで複雑なパスワードに置き換えます)。
 
-   > **注**: 使用したパスワードを必ず記録してください。 後でこのラボと以降のラボで必要になります。
+   > **注**: 使用したパスワードを必ず記録してください。 **このラボでこの後、およびこのつづきのラボで必要になります。**.
 
    ```powershell
    $userName = 'aadsyncuser'
@@ -400,12 +402,12 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    (Get-AzureADUser -Filter "MailNickName eq '$userName'").UserPrincipalName
    ```
 
-   > **注**: ユーザー プリンシパル名を記録します。 これはこの演習で後から必要になります。 
+   > **注**:ユーザー プリンシパル名**および**パスワードを記録します。 これはこの演習で後から必要になります。 
 
 
 #### タスク 4: Microsoft Entra Connect をインストールする
 
-1. **az140-dc-vm11** へのリモート デスクトップ セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインから、以下を実行して、TLS 1.2 を有効にします。
+1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインから、以下を実行して、TLS 1.2 を有効にします。
 
    ```powershell
    New-Item 'HKLM:\SOFTWARE\WOW6432Node\Microsoft\.NETFramework\v4.0.30319' -Force | Out-Null
@@ -423,18 +425,18 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    Write-Host 'TLS 1.2 has been enabled.'
    ```
    
-1. **az140-dc-vm11** への [リモート デスクトップ] セッション内で、インターネット エクスプローラーを起動し、[「Microsoft Edge for Business のダウンロード ページ」](https://www.microsoft.com/en-us/edge/business/download)に移動します。
+1. **az140-dc-vm11** への Bastion セッション内で、Internet Explorer を起動して、[Microsoft Edge for Business ダウンロード ページ](https://www.microsoft.com/en-us/edge/business/download)に移動します。
 1. [「Microsoft Edge for Business のダウンロード ページ」](https://www.microsoft.com/en-us/edge/business/download)から、最新の安定バージョンの Microsoft Edge をダウンロードし、インストールして起動し、既定の設定で構成します。
 1. **az140-dc-vm11** への [リモート デスクトップ] セッション内で、Microsoft Edge を使用して、[Azure portal](https://portal.azure.com) に移動します。 プロンプトが表示されたら、このラボで使用するサブスクリプションの所有者ロールを持つユーザー アカウントの Microsoft Entra 資格情報を使用してサインインします。
-1. Azure portal で、「Azure portal」ページの上部にある **[リソース、サービス、ドキュメントの検索]** テキスト ボックスを使用して、**[Azure Active Directory]** ブレードを検索して移動し、Microsoft Entra テナント ブレードのハブ メニューの **[管理]** セクションで、**[Microsoft Entra Connect]** を選択します。
-1. **[Microsoft Entra Connect]** ブレードで、最初に左側にある **[同期の接続]** リンクを選択し、**[Microsoft Entra Connect のダウンロード]** リンクを選択します。 これにより、新しいブラウザー タブが自動的に開き、**「Microsoft Azure Active Directory Connect」** ダウンロード ページが表示されます。
-1. **[Microsoft Azure Active Directory Connect]** ダウンロード ページで、**[ダウンロード]** を選択します。
+1. Azure portal で、Azure portal ページの上部にある **[リソース、サービス、ドキュメントを検索する]** テキスト ボックスを使用し、**[Microsoft Entra ID]** ブレードを検索してそこに移動したら、[Microsoft Entra テナント] ブレードのハブ メニューの **[管理]** セクションで、**[Microsoft Entra Connect]** を選択します。
+1. **[Microsoft Entra Connect]** ブレードで、サービス メニューから **[Connect 同期]** リンクを選択したら、**[Microsoft Entra Connect のダウンロード]** リンクを選択します。 この操作を行うと、**Microsoft Entra Connect** のダウンロード ページが表示されている新しいブラウザー タブが自動的に開きます。
+1. **Microsoft Entra Connect** のダウンロード ページで、**[ダウンロード]** を選択します。
 1. **AzureADConnect.msi** インストーラーを実行するか保存するかを確認するメッセージが表示されたら、**[実行]** を選択します。 そうでない場合は、ダウンロードした後でファイルを開き、**Microsoft Azure Active Directory Connect** ウィザードを開始します。
-1. **[Microsoft Azure Active Directory Connect]** ウィザードの **「Microsoft Entra Connect へようこそ」** ページで、**[ライセンス条項とプライバシーに関する通知に同意します]** のチェック ボックスをオンにして、**[続行]** を選択します。
+1. **Microsoft Azure Active Directory Connect** ウィザードの **[Azure AD Connect へようこそ]** ページで、チェック ボックス **[ライセンス条項とプライバシーに関する通知に同意します]** をオンにして、**[続行]** を選択します。
 1. **Microsoft Azure Active Directory Connect** ウィザードの **[簡単設定]** ページで、**[カスタマイズ]** オプションを選択します。
 1. **[必要なコンポーネントをインストールする]** ページで、オプションの構成オプションをすべて選択解除したままにして、 **[インストール]** を選択します。
 1. **[ユーザー サインイン]** ページで、**[パスワード ハッシュの同期]** のみを確実に有効にして、**[次へ]** を選択します。
-1. **「Microsoft Entra に接続」** ページで、前の演習で作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証し、**[次へ]** を選択します。 
+1. **[Azure AD に接続]** ページで、前の演習で作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証し、**[次へ]** を選択します。 
 
    > **注**: この演習で前に記録した **aadsyncuser** アカウントの userPrincipalName 属性を指定し、パスワードとしてこのラボで前に設定したパスワードを指定します。
 
@@ -447,7 +449,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    |パスワード|**Pa55w.rd1234**|
 
 1. **[ディレクトリの接続]** ページに戻り、**adatum.com** エントリが構成済みディレクトリとして表示されていることを保証し、**[次へ]** を選択します
-1. **「Microsoft Entra サインインの構成」** ページで、**「UPN サフィックスが検証済みのドメインと一致しない場合、ユーザーはオンプレミスの資格情報を使用して Microsoft Entra にサインインできなくなります」** という警告に注意して、**[一部の UPN サフィックスが確認済みドメインに一致していなくても続行する]** のチェック ボックスをオンにして、**[次へ]** を選択します。
+1. **[Azure AD サインインの構成]** ページで、"**UPN サフィックスが検証済みのドメインと一致しない場合、ユーザーはオンプレミスの資格情報を使用して Azure AD にサインインできなくなります**" という警告に注意して、チェック ボックス **[一部の UPN サフィックスが確認済みドメインに一致していなくても続行する]** をオンにして、**[次へ]** を選択します。
 
    > **注**: Microsoft Entra テナントには、**adatum.com** AD DS の UPN サフィックスの 1 つと一致する検証済みのカスタム DNS ドメインがないため、これは想定内のことです。
 
@@ -457,7 +459,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 1. **[オプション機能]** ページで、既定の設定をそのまま使用して、**[次へ]** を選択します。
 1. **[構成の準備完了]** ページで、**[構成が完了したら、同期プロセスを開始する]** チェック ボックスがオンになっていることを保証し、**[インストール]** を選択します。
 
-   > **注**:インストールにはおよそ 2 分かかります。
+   > **注**:インストールには約 5 分かかります。
 
 1. **[構成が完了しました]** ページの情報を確認し、**[終了]** を選択して、**[Microsoft Azure Active Directory Connect]** ウィンドウを閉じます。
 1. **az140-dc-vm11** への [リモート デスクトップ] セッション内において、Azure portal を表示している Microsoft Edge ウィンドウで、Adatum Lab Microsoft Entra テナントの **[ユーザー - すべてのユーザー]** ブレードに移動します。
