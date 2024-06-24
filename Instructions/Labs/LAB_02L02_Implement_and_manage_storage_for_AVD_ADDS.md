@@ -97,7 +97,20 @@ AD DS 環境で Azure Virtual Desktop をデプロイするためには、スト
    Get-ChildItem -Path C:\Allfiles\Labs\02 -File -Recurse | Unblock-File
    ```
 
-1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインで、以下のように実行して、後続のスクリプトを実行するために必要な変数を設定します。
+1. **[管理者: Windows PowerShell ISE]** コンソールで、次を実行して Windows アカウント マネージャーを無効にします。
+
+   ```powershell
+   Update-AzConfig -EnableLoginByWam $false
+   ```
+
+1. **[管理者: Windows PowerShell ISE]** コンソールから、以下を実行して、Azure サブスクリプションにサインインします。
+
+   ```powershell
+   Connect-AzAccount
+   ```
+
+1. プロンプトが表示されたら、このラボで使用しているサブスクリプションで所有者の役割を持つ Entra ID ユーザーアカウントの資格情報を入力します。 
+1. **[管理者: Windows PowerShell ISE]** スクリプト ペインで、以下のように実行して、後続のスクリプトを実行するために必要な変数を設定します。
 
    ```powershell
    $subscriptionId = (Get-AzContext).Subscription.Id
@@ -105,7 +118,7 @@ AD DS 環境で Azure Virtual Desktop をデプロイするためには、スト
    $storageAccountName = (Get-AzStorageAccount -ResourceGroupName $resourceGroupName)[0].StorageAccountName
    ```
 
-1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、このタスクの前半で作成した Azure Storage アカウントを表し、AD DS 認証の実装に使用される AD DS コンピューター オブジェクトを作成します。
+1. **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、このタスクの前半で作成した Azure Storage アカウントを表し、AD DS 認証の実装に使用される AD DS コンピューター オブジェクトを作成します。
 
    >**注**: このスクリプト ブロックの実行中にエラーが発生した場合は、CopyToPSPath.ps1 スクリプトと同じディレクトリを使用していることを確認してください。 このラボの前半でのファイルの抽出方法に応じて、"AzFilesHybrid" という名前のサブ フォルダーに入れる必要があります。 PowerShell コンテキストでは、**cd AzFilesHybrid** を使用して、ディレクトリをフォルダーに変更します。
 
@@ -120,7 +133,7 @@ AD DS 環境で Azure Virtual Desktop をデプロイするためには、スト
       -OrganizationalUnitDistinguishedName 'OU=WVDInfra,DC=adatum,DC=com'
    ```
 
-1. **az140-dc-vm11** への Bastion セッション内で、**[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、Azure Storage アカウントで AD DS 認証が有効になっていることを確認します。
+1. **[管理者: Windows PowerShell ISE]** スクリプト ペインで、次のように実行して、Azure Storage アカウントで AD DS 認証が有効になっていることを確認します。
 
    ```powershell
    $storageaccount = Get-AzStorageAccount -ResourceGroupName $resourceGroupName -Name $storageAccountName
@@ -160,7 +173,7 @@ AD DS 環境で Azure Virtual Desktop をデプロイするためには、スト
    |設定|Value|
    |---|---|
    |選択|**az140-wvd-users**|
-1. **[ロールの割り当ての追加]** ブレードで、**[レビューと割り当て]** を選択したら、**[レビューと割り当て]** を選択します。
+1. **[ロールの割り当ての追加]** ブレードで **[確認と割り当て]** を選択してから、**[確認と割り当て]** を選択します。
 1. ストレージ アカウントの **[アクセス制御 (IAM)]** ブレードで、**[+ 追加]** を選択し、ドロップダウン メニューで **[ロール割り当ての追加]** を選択します。 
 1. **[ロール割り当ての追加]** ブレードの **[ロール]** タブで、次の設定を指定して、**[次へ]** を選択します。
 
