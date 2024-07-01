@@ -136,14 +136,14 @@ Microsoft Entra 条件付きアクセスを使用して、Active Directory Domai
    Move-ADObject -Identity "CN=az140-cl-vm11,CN=Computers,DC=adatum,DC=com" -TargetPath "OU=WVDClients,DC=adatum,DC=com"
    ```
 
-1. **az140-dc-vm11** への Bastion セッション内の **[スタート]** メニューで、**Microsoft Entra Connect** フォルダーを展開し、**Microsoft Entra Connect** を選択します。
+1. **az140-dc-vm11** への Bastion セッション内の **[スタート]** メニューで、**Azure AD Connect** フォルダーを展開し、**[Azure AD Connect]** を選択します。
 1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[Azure AD Connect へようこそ]** ページで、**[構成]** を選択します。
 1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[追加のタスク]** ページで、**[同期オプションをカスタマイズする]** を選択して、**[次へ]** を選択します。
 1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[Microsoft Entra に接続]** ページで、前の演習で作成した **aadsyncuser** ユーザー アカウントの資格情報を使用して認証し、**[次へ]** を選択します。 
 1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[ディレクトリの接続]** ページで、**[次へ]** を選択します。
 1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[ドメインと OU のフィルタリング]** ページで、**[選択したドメインと OU を同期する]** オプションが選択されていることを確認し、**adatum.com** ノードを展開し、**ToSync OU** の横にあるチェックボックスが選択されていることを確認し、**WVDClients OU** の横にあるチェックボックスを選択して、**[次へ]** を選択します。
 1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[オプション機能]** ページで、規定の設定を受け入れて、**[次へ]** を選択します。
-1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[構成の準備完了]** ページで、**[構成が完了したら、同期プロセスを開始する]** チェックボックスが選択されていることを確認して、**[構成]** を選択します。
+1. **[Microsoft Azure Active Directory Connect]** ウィンドウの **[構成の準備完了]** ページで、**[構成の完了時に同期プロセスを開始する]** チェックボックスがオンになっていることを確認し、**[構成]** を選択します。
 1. **[構成が完了しました]** ページの情報を確認し、**[終了]** を選択して、**[Microsoft Azure Active Directory Connect]** ウィンドウを閉じます。
 
 #### タスク 5:Microsoft Azure Active Directory Connect の完全同期をトリガーする

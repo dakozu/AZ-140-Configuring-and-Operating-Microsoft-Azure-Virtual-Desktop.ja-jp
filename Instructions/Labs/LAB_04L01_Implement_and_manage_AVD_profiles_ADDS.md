@@ -82,6 +82,12 @@ Active Directory Domain Services (AD DS) 環境で Azure Virtual Desktop プロ�
 
    > **注**:Az モジュールのインストールからの出力が表示されるまで、3 から 5 分待つ必要がある場合があります。 また、出力が停止した**後**、さらに 5 分待つ必要がある場合があります。 これは正しい動作です。
 
+1. **[管理者: Windows PowerShell ISE]** コンソールで、次を実行して Windows アカウント マネージャーを無効にします。
+
+   ```powershell
+   Update-AzConfig -EnableLoginByWam $false
+   ```
+
 1. **[管理者: Windows PowerShell ISE]** コンソールから、以下を実行して、Azure サブスクリプションにサインインします。
 
    ```powershell
