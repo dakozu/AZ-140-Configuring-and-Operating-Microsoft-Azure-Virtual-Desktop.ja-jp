@@ -95,9 +95,9 @@ Azure Active Directory Domain Servicess (Microsoft Entra DS) 環境でホスト 
    |名前のプレフィックス|**az140-21-p1**|
    |仮想マシンの場所|このラボの最初の演習でリソースをデプロイした Azure リージョンの名前|
    |可用性のオプション|**インフラストラクチャ冗長は必要ありません**|
-   |セキュリティの種類|**Standard**|
+   |セキュリティの種類|**トラステッド起動の仮想マシン**|
    |Image|**Windows 11 Enterprise マルチセッション + Microsoft 365 Apps、バージョン 22H2**|
-   |[仮想マシンのサイズ]|**Standard D2s v3**|
+   |[仮想マシンのサイズ]|**標準の DC2s_v3**|
    |[Number of VMs](VM の数)|**2**|
    |OS ディスクの種類|**Standard SSD**|
    |仮想ネットワーク|**az140-aadds-vnet11a**|
