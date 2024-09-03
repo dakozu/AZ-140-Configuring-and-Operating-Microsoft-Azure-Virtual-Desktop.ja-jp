@@ -132,10 +132,10 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
 
 1. Azure portal で、**[Cloud Shell]**] ペインを閉じます。
 1. ラボ コンピューターから、同じ Web ブラウザー ウィンドウで、別の Web ブラウザー タブを開き、「[新しい Windows VM を作成し、新しい AD フォレスト、ドメイン、DC を作成する](https://github.com/az140mp/azure-quickstart-templates/tree/master/application-workloads/active-directory/active-directory-new-domain)」という名前のクイック スタート テンプレートのカスタマイズされたバージョンに移動します。 
-1. **[新しい Windows VM を作成し、新しい AD フォレスト、ドメイン、DC を作成する]** ページで、ページを下方向にスクロールして、**[Azure にデプロイ]** を選択します。 これにより、ブラウザーが Azure portal の **[新しい AD フォレストで Azure VM を作成する]** ブレードに自動的にリダイレクトされます。
-1. **[新しい AD フォレストを使用して Azure VM を作成する]** ブレードで、**[パラメーターの編集]** を選択します。
+1. **[Create a new Windows VM and create a new AD Forest, Domain and DC]** ページで、ページを下方向にスクロールして、**[Deploy to Azure]** を選択します。 これにより、ブラウザーが Azure portal の **[Create an Azure VM with a new AD Forest]** ブレードに自動的にリダイレクトされます。
+1. **[Create an Azure VM with a new AD Forest]** ブレードで、**[パラメーターの編集]** を選択します。
 1. **[パラメーターの編集]** ブレードで、**[ファイルの読み込み]** を選択し、**[開く]** ダイアログ ボックスで、**\\\\AZ-140\\AllFiles\\Labs\\01\\az140-11_azuredeploydc11.parameters.json** を選択して、**[開く]** を選択してから、**[保存]** を選択します。 
-1. **[新しい AD フォレストで Azure VM を作成する]** ブレードで、次の設定を指定します (他の設定は既存の値のままにします)。
+1. **[Create an Azure VM with a new AD Forest]** ブレードで、次の設定を指定します (他の設定は既存の値のままにします)。
 
    |設定|値|
    |---|---|
@@ -143,7 +143,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    |リソース グループ|**az140-11-RG**|
    |ドメイン名|**adatum.com**|
 
-1. **[新しい AD フォレストを使用して Azure VM を作成する]** ブレードで、**[確認と作成]** を選択し、**[作成]** を選択します。
+1. **[Create an Azure VM with a new AD Forest]** ブレードで、**[確認と作成]** を選択し、**[作成]** を選択します。
 
    > **注**: このデプロイが完了するまで待ってから、次の演習に進んでください。 デプロイには 20 から 25 分かかる場合があります。 
 
