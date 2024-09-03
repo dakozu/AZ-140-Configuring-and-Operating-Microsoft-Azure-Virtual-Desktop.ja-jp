@@ -257,7 +257,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    New-ADOrganizationalUnit 'WVDClients' -path 'DC=adatum,DC=com' -ProtectedFromAccidentalDeletion $false
    ```
 
-1. **[Administrator: Windows PowerShell ISE]** スクリプト ペインから、次を実行して、このラボで使用する Microsoft Entra テナントに同期される AD DS ユーザー アカウントを作成します (`<password>` プレースホルダーは、ランダムで複雑なパスワードに置き換えます)。
+1. **[Administrator: Windows PowerShell ISE]** スクリプト ペインから、**次のスクリプトの`<password>` プレースホルダーは、ランダムで複雑なパスワードに置き換えて** 実行して、このラボで使用する Microsoft Entra テナントに同期される AD DS ユーザー アカウントを作成します
 
    > **注**: 使用したパスワードを必ず記録してください。 後でこのラボと以降のラボで必要になります。
 
