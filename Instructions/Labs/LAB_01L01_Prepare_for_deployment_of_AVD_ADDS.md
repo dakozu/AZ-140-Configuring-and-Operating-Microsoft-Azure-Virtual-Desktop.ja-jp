@@ -63,7 +63,7 @@ Active Directory Domain Services (AD DS) 環境の展開を準備する必要が
    Get-AzResourceProvider -ListAvailable | Where-Object {$_.ProviderNamespace -eq 'Microsoft.Compute'}
    ```
 
-   >**注**: 状態が "**登録済み**" と表示されていることを確認します。 そうでない場合は、数分待ってからこの手順を繰り返します。
+   >**注**: RegistrationState が "**Registered**" と表示されていることを確認します。 そうでない場合は、数分待ってからこの手順を繰り返します。
 
 1. Azure portal の **[Cloud Shell]** の [PowerShell] セッションで、次のコマンドの場所を設定するために以下を実行します（たとえば `eastus` のように、`<Azure_region>` のプレースホルダーをこのラボで使用する Azure リージョンの名前に置き換えます）。
 
